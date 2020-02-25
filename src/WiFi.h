@@ -75,6 +75,15 @@ public:
      */
     int begin(const char* ssid, const char *passphrase);
     int iotBegin(const char* ssid, const char *passphrase, const char *mqtt_broker);
+    int iotUpdate();
+    int iotAddPropertyBool(const char* name, uint8_t permission_type, uint8_t seconds);
+    int iotAddPropertyInt(const char* name, uint8_t permission_type, uint8_t seconds);
+    int iotAddPropertyFloat(const char* name, uint8_t permission_type, uint8_t seconds);
+    int iotAddPropertyString(const char* name, uint8_t permission_type, uint8_t seconds);
+    int iotUpdatePropertyBool(const char* name, const bool value);
+    int iotUpdatePropertyInt(const char* name, const int value);
+    int iotUpdatePropertyFloat(const char* name, const float value);
+    int iotUpdatePropertyString(const char* name, const char* value);
 
     uint8_t beginAP(const char *ssid);
     uint8_t beginAP(const char *ssid, uint8_t channel);
