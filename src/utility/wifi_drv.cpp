@@ -214,6 +214,116 @@ int8_t WiFiDrv::wifiSetKey(const char* ssid, uint8_t ssid_len, uint8_t key_idx, 
     return _data;
 }
 
+int8_t WiFiDrv::iotCloudBegin(const char* ssid, uint8_t ssid_len, const void *key, const uint8_t len, const char* mqtt_broker, uint8_t mqtt_broker_len)
+{
+	WAIT_FOR_SLAVE_SELECT();
+    // Send Command
+    SpiDrv::sendCmd(IOT_BEGIN, PARAM_NUMS_3);
+    SpiDrv::sendParam((uint8_t*)ssid, ssid_len, NO_LAST_PARAM);
+    SpiDrv::sendParam((uint8_t*)key, len, NO_LAST_PARAM);
+    SpiDrv::sendParam((uint8_t*)mqtt_broker, mqtt_broker_len, LAST_PARAM);
+    
+    // pad to multiple of 4
+    int commandSize = 7 + ssid_len + len + mqtt_broker_len;
+    while (commandSize % 4) {
+        SpiDrv::readChar();
+        commandSize++;
+    }
+
+    SpiDrv::spiSlaveDeselect();
+    //Wait the reply elaboration
+    SpiDrv::waitForSlaveReady();
+    SpiDrv::spiSlaveSelect();
+
+    // Wait for reply
+    uint8_t _data = 0;
+    uint8_t _dataLen = 0;
+    if (!SpiDrv::waitResponseCmd(IOT_BEGIN, PARAM_NUMS_1, &_data, &_dataLen))
+    {
+        WARN("error waitResponse");
+        _data = WL_FAILURE;
+    }
+    SpiDrv::spiSlaveDeselect();
+    return _data;
+}
+
+
+uint8_t WiFiDrv::iotCloudUpdate()
+{
+    WAIT_FOR_SLAVE_SELECT();
+
+    // Send Command
+    SpiDrv::sendCmd(IOT_UPDATE, PARAM_NUMS_0);
+
+    SpiDrv::spiSlaveDeselect();
+    //Wait the reply elaboration
+    SpiDrv::waitForSlaveReady();
+    SpiDrv::spiSlaveSelect();
+
+    // Wait for reply
+    uint8_t _data = 1;
+    uint8_t _dataLen = 0;
+    SpiDrv::waitResponseCmd(IOT_UPDATE, PARAM_NUMS_1, &_data, &_dataLen);
+
+    SpiDrv::spiSlaveDeselect();
+
+    return _data;
+}
+
+int8_t WiFiDrv::iotCloudAddPropertyBool(const char* name, uint8_t name_len, uint8_t permission_type, uint8_t seconds)
+{
+    return iotCloudAddProperty(1, name, name_len, permission_type, seconds);
+}
+
+int8_t WiFiDrv::iotCloudAddPropertyInt(const char* name, uint8_t name_len, uint8_t permission_type, uint8_t seconds)
+{
+    return iotCloudAddProperty(2, name, name_len, permission_type, seconds);
+}
+
+int8_t WiFiDrv::iotCloudAddPropertyFloat(const char* name, uint8_t name_len, uint8_t permission_type, uint8_t seconds)
+{
+    return iotCloudAddProperty(3, name, name_len, permission_type, seconds);
+}
+
+int8_t WiFiDrv::iotCloudAddPropertyString(const char* name, uint8_t name_len, uint8_t permission_type, uint8_t seconds)
+{
+    return iotCloudAddProperty(4, name, name_len, permission_type, seconds);
+}
+
+int8_t WiFiDrv::iotCloudAddProperty(uint8_t property_type, const char* name, uint8_t name_len, uint8_t permission_type, uint8_t seconds)
+{
+	WAIT_FOR_SLAVE_SELECT();
+    // Send Command
+    SpiDrv::sendCmd(IOT_ADD_PROPERTY, PARAM_NUMS_4);
+    SpiDrv::sendParam(&property_type, 1, NO_LAST_PARAM);
+    SpiDrv::sendParam((uint8_t*)name, name_len, NO_LAST_PARAM);
+    SpiDrv::sendParam(&permission_type, 1, NO_LAST_PARAM);
+    SpiDrv::sendParam(&seconds, 1, LAST_PARAM);
+    
+    // pad to multiple of 4
+    int commandSize = 9 + ssid_len + len + mqtt_broker_len;
+    while (commandSize % 4) {
+        SpiDrv::readChar();
+        commandSize++;
+    }
+
+    SpiDrv::spiSlaveDeselect();
+    //Wait the reply elaboration
+    SpiDrv::waitForSlaveReady();
+    SpiDrv::spiSlaveSelect();
+
+    // Wait for reply
+    uint8_t _data = 0;
+    uint8_t _dataLen = 0;
+    if (!SpiDrv::waitResponseCmd(IOT_ADD_PROPERTY, PARAM_NUMS_1, &_data, &_dataLen))
+    {
+        WARN("error waitResponse");
+        _data = WL_FAILURE;
+    }
+    SpiDrv::spiSlaveDeselect();
+    return _data;
+}
+
 void WiFiDrv::config(uint8_t validParams, uint32_t local_ip, uint32_t gateway, uint32_t subnet)
 {
 	WAIT_FOR_SLAVE_SELECT();

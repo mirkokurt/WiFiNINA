@@ -110,6 +110,46 @@ public:
      * return: WL_SUCCESS or WL_FAILURE
      */
     static int8_t wifiSetKey(const char* ssid, uint8_t ssid_len, uint8_t key_idx, const void *key, const uint8_t len);
+    
+    
+    /* Initialize the ArduinoIoTCloud.
+     * Configure ssid and key into the device.
+     *
+     * param ssid: Pointer to the SSID string.
+     * param ssid_len: Lenght of ssid string.
+     * param key: Key input buffer.
+     * param len: Lenght of key string.
+     * param mqtt_broker: broker address.
+     * param mqtt_broker_len: Lenght of broker address string.
+     * return: WL_SUCCESS or WL_FAILURE
+     */
+    static int8_t iotCloudBegin(const char* ssid, uint8_t ssid_len, const void *key, const uint8_t len, const char* mqtt_broker, uint8_t mqtt_broker_len);
+
+    /* Update the ArduinoIoTCloud.
+     * Run the state machine of the iot cloud connection
+     *
+    */
+    static uint8_t iotCloudUpdate();
+
+    /* Add a property in ArduinoIoTCloud.
+     *
+     * param ssid: Pointer to the SSID string.
+     * param ssid_len: Lenght of ssid string.
+     * param key: Key input buffer.
+     * param len: Lenght of key string.
+     * param mqtt_broker: broker address.
+     * param mqtt_broker_len: Lenght of broker address string.
+     * return: WL_SUCCESS or WL_FAILURE
+     */
+    static uint8_t iotCloudAddPropertyBool(const char* name, uint8_t name_len, uint8_t permission_type, uint8_t seconds);
+    static uint8_t iotCloudAddPropertyInt(const char* name, uint8_t name_len, uint8_t permission_type, uint8_t seconds);
+    static uint8_t iotCloudAddPropertyFloat(const char* name, uint8_t name_len, uint8_t permission_type, uint8_t seconds);
+    static uint8_t iotCloudAddPropertyString(const char* name, uint8_t name_len, uint8_t permission_type, uint8_t seconds);
+    /* Add a property in ArduinoIoTCloud.
+     *
+     * param property_type: identifier of the property type 1:bool, 2:int, 3:float, 4:string
+     */
+    static uint8_t iotCloudAddProperty(uint8_t property_type, const char* name, uint8_t name_len, uint8_t permission_type, uint8_t seconds);
 
     static int8_t wifiSetApNetwork(const char* ssid, uint8_t ssid_len);
     static int8_t wifiSetApPassphrase(const char* ssid, uint8_t ssid_len, const char *passphrase, const uint8_t len);

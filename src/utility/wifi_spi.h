@@ -102,6 +102,12 @@ enum {
     SET_PIN_MODE		= 0x50,
     SET_DIGITAL_WRITE	= 0x51,
     SET_ANALOG_WRITE	= 0x52,
+
+		// ArduinoIoTCloud commands
+		IOT_BEGIN		= 0x60,
+		IOT_UPDATE	= 0x61,
+		IOT_ADD_PROPERTY	= 0x62,
+
 };
 
 

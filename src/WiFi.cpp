@@ -104,6 +104,55 @@ int WiFiClass::begin(const char* ssid, const char *passphrase)
     return status;
 }
 
+int WiFiClass::begin(const char* ssid, const char *passphrase)
+{
+	uint8_t status = WL_IDLE_STATUS;
+
+    // set passphrase
+    if (WiFiDrv::wifiSetPassphrase(ssid, strlen(ssid), passphrase, strlen(passphrase))!= WL_FAILURE)
+    {
+	   for (unsigned long start = millis(); (millis() - start) < _timeout;)
+ 	   {
+ 		   delay(WL_DELAY_START_CONNECTION);
+ 		   status = WiFiDrv::getConnectionStatus();
+		   if ((status != WL_IDLE_STATUS) && (status != WL_NO_SSID_AVAIL) && (status != WL_SCAN_COMPLETED)) {
+		     break;
+		   }
+ 	   }
+    }else{
+    	status = WL_CONNECT_FAILED;
+    }
+    return status;
+}
+
+int WiFiClass::iotBegin(const char* ssid, const char *passphrase, const char *mqtt_broker)
+{
+	uint8_t status = WL_IDLE_STATUS;
+
+    // set passphrase
+    if (WiFiDrv::iotCloudBegin(ssid, strlen(ssid), passphrase, strlen(passphrase), mqtt_broker, strlen(mqtt_broker))!= WL_FAILURE)
+    {
+			status = 1;
+    }else{
+    	status = -1;
+    }
+    return status;
+}
+
+int WiFiClass::iotUpdate()
+{
+	uint8_t status = WL_IDLE_STATUS;
+
+    // set passphrase
+    if (WiFiDrv::iotCloudUpdate()
+    {
+			status = 1;
+    }else{
+    	status = -1;
+    }
+    return status;
+}
+
 uint8_t WiFiClass::beginAP(const char *ssid)
 {
 	return beginAP(ssid, 1);

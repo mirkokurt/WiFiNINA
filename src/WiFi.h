@@ -74,6 +74,7 @@ public:
      *        must be between ASCII 32-126 (decimal).
      */
     int begin(const char* ssid, const char *passphrase);
+    int iotBegin(const char* ssid, const char *passphrase, const char *mqtt_broker);
 
     uint8_t beginAP(const char *ssid);
     uint8_t beginAP(const char *ssid, uint8_t channel);
