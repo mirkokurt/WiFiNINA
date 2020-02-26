@@ -420,7 +420,7 @@ uint8_t WiFiDrv::iotCloudUpdatePropertyFloat(const char* name, uint8_t name_len,
     return _data;
 }
 
-uint8_t WiFiDrv::iotCloudUpdatePropertyString(const char* name, uint8_t name_len, const char* value, uint8_t value_len) 
+uint8_t WiFiDrv::iotCloudUpdatePropertyString(const char* name, uint8_t name_len, String value, uint8_t value_len) 
 {
     WAIT_FOR_SLAVE_SELECT();
     // Send Command
@@ -449,6 +449,238 @@ uint8_t WiFiDrv::iotCloudUpdatePropertyString(const char* name, uint8_t name_len
         _data = WL_FAILURE;
     }
     SpiDrv::spiSlaveDeselect();
+    return _data;
+}
+
+bool WiFiDrv::iotCloudReadPropertyBool(const char* name, uint8_t name_len) 
+{
+    WAIT_FOR_SLAVE_SELECT();
+    // Send Command
+    SpiDrv::sendCmd(IOT_READ_BOOL, PARAM_NUMS_1);
+    SpiDrv::sendParam((uint8_t*)name, name_len, LAST_PARAM);
+
+    // pad to multiple of 4
+    int commandSize = 5 + name_len;
+    while (commandSize % 4) {
+        SpiDrv::readChar();
+        commandSize++;
+    }
+
+    SpiDrv::spiSlaveDeselect();
+    //Wait the reply elaboration
+    SpiDrv::waitForSlaveReady();
+    SpiDrv::spiSlaveSelect();
+
+    // Wait for reply
+    uint8_t _data = 0;
+    uint8_t _dataLen = 0;
+    if (!SpiDrv::waitResponseCmd(IOT_READ_BOOL, PARAM_NUMS_1, &_data, &_dataLen))
+    {
+        WARN("error waitResponse");
+        _data = WL_FAILURE;
+    }
+    SpiDrv::spiSlaveDeselect();
+
+    bool b;
+    memcpy(&b, &_data, sizeof(b));
+    return b;
+}
+
+int WiFiDrv::iotCloudReadPropertyInt(const char* name, uint8_t name_len) 
+{
+    WAIT_FOR_SLAVE_SELECT();
+    // Send Command
+    SpiDrv::sendCmd(IOT_READ_INT, PARAM_NUMS_1);
+    SpiDrv::sendParam((uint8_t*)name, name_len, LAST_PARAM);
+
+    // pad to multiple of 4
+    int commandSize = 5 + name_len;
+    while (commandSize % 4) {
+        SpiDrv::readChar();
+        commandSize++;
+    }
+
+    SpiDrv::spiSlaveDeselect();
+    //Wait the reply elaboration
+    SpiDrv::waitForSlaveReady();
+    SpiDrv::spiSlaveSelect();
+
+    // Wait for reply
+    uint8_t _data = 0;
+    uint8_t _dataLen = 0;
+    if (!SpiDrv::waitResponseCmd(IOT_READ_FLOAT, PARAM_NUMS_1, &_data, &_dataLen))
+    {
+        WARN("error waitResponse");
+        _data = WL_FAILURE;
+    }
+    SpiDrv::spiSlaveDeselect();
+
+    int i;
+    memcpy(&i, &_data, sizeof(i));
+    return i;
+}
+
+float WiFiDrv::iotCloudReadPropertyFloat(const char* name, uint8_t name_len) 
+{
+    WAIT_FOR_SLAVE_SELECT();
+    // Send Command
+    SpiDrv::sendCmd(IOT_READ_FLOAT, PARAM_NUMS_1);
+    SpiDrv::sendParam((uint8_t*)name, name_len, LAST_PARAM);
+
+    // pad to multiple of 4
+    int commandSize = 5 + name_len;
+    while (commandSize % 4) {
+        SpiDrv::readChar();
+        commandSize++;
+    }
+
+    SpiDrv::spiSlaveDeselect();
+    //Wait the reply elaboration
+    SpiDrv::waitForSlaveReady();
+    SpiDrv::spiSlaveSelect();
+
+    // Wait for reply
+    uint8_t _data = 0;
+    uint8_t _dataLen = 0;
+    if (!SpiDrv::waitResponseCmd(IOT_READ_FLOAT, PARAM_NUMS_1, &_data, &_dataLen))
+    {
+        WARN("error waitResponse");
+        _data = WL_FAILURE;
+    }
+    SpiDrv::spiSlaveDeselect();
+
+    float f;
+    memcpy(&f, &_data, sizeof(f));
+    return f;
+}
+
+String WiFiDrv::iotCloudReadPropertyString(const char* name, uint8_t name_len) 
+{
+    WAIT_FOR_SLAVE_SELECT();
+    // Send Command
+    SpiDrv::sendCmd(IOT_READ_STRING, PARAM_NUMS_1);
+    SpiDrv::sendParam((uint8_t*)name, name_len, LAST_PARAM);
+
+    // pad to multiple of 4
+    int commandSize = 5 + name_len;
+    while (commandSize % 4) {
+        SpiDrv::readChar();
+        commandSize++;
+    }
+
+    SpiDrv::spiSlaveDeselect();
+    //Wait the reply elaboration
+    SpiDrv::waitForSlaveReady();
+    SpiDrv::spiSlaveSelect();
+
+    // Wait for reply
+    uint8_t _data = 0;
+    uint8_t _dataLen = 0;
+    if (!SpiDrv::waitResponseCmd(IOT_READ_STRING, PARAM_NUMS_1, &_data, &_dataLen))
+    {
+        WARN("error waitResponse");
+        _data = WL_FAILURE;
+    }
+    SpiDrv::spiSlaveDeselect();
+
+    String s;
+    memcpy(&s, &_data, _dataLen);
+    return s;
+}
+
+uint8_t WiFiDrv::iotCloudSetThingId(const char* thing_id, uint8_t thing_id_len) 
+{
+    WAIT_FOR_SLAVE_SELECT();
+    // Send Command
+    SpiDrv::sendCmd(IOT_SET_THING_ID, PARAM_NUMS_1);
+    SpiDrv::sendParam((uint8_t*)thing_id, thing_id_len, LAST_PARAM);
+
+    // pad to multiple of 4
+    int commandSize = 5 + thing_id_len;
+    while (commandSize % 4) {
+        SpiDrv::readChar();
+        commandSize++;
+    }
+
+    SpiDrv::spiSlaveDeselect();
+    //Wait the reply elaboration
+    SpiDrv::waitForSlaveReady();
+    SpiDrv::spiSlaveSelect();
+
+    // Wait for reply
+    uint8_t _data = 0;
+    uint8_t _dataLen = 0;
+    if (!SpiDrv::waitResponseCmd(IOT_SET_THING_ID, PARAM_NUMS_1, &_data, &_dataLen))
+    {
+        WARN("error waitResponse");
+        _data = WL_FAILURE;
+    }
+    SpiDrv::spiSlaveDeselect();
+
+    return _data;
+}
+
+uint8_t WiFiDrv::iotCloudSetBoardId(const char* board_id, uint8_t board_id_len) 
+{
+    WAIT_FOR_SLAVE_SELECT();
+    // Send Command
+    SpiDrv::sendCmd(IOT_SET_THING_ID, PARAM_NUMS_1);
+    SpiDrv::sendParam((uint8_t*)board_id, board_id_len, LAST_PARAM);
+
+    // pad to multiple of 4
+    int commandSize = 5 + board_id_len;
+    while (commandSize % 4) {
+        SpiDrv::readChar();
+        commandSize++;
+    }
+
+    SpiDrv::spiSlaveDeselect();
+    //Wait the reply elaboration
+    SpiDrv::waitForSlaveReady();
+    SpiDrv::spiSlaveSelect();
+
+    // Wait for reply
+    uint8_t _data = 0;
+    uint8_t _dataLen = 0;
+    if (!SpiDrv::waitResponseCmd(IOT_SET_THING_ID, PARAM_NUMS_1, &_data, &_dataLen))
+    {
+        WARN("error waitResponse");
+        _data = WL_FAILURE;
+    }
+    SpiDrv::spiSlaveDeselect();
+
+    return _data;
+}
+
+uint8_t WiFiDrv::iotCloudSetSecretDeviceKey(const char* secret_key, uint8_t secret_key_len) 
+{
+    WAIT_FOR_SLAVE_SELECT();
+    // Send Command
+    SpiDrv::sendCmd(IOT_SET_THING_ID, PARAM_NUMS_1);
+    SpiDrv::sendParam((uint8_t*)secret_key, secret_key_len, LAST_PARAM);
+
+    // pad to multiple of 4
+    int commandSize = 5 + secret_key_len;
+    while (commandSize % 4) {
+        SpiDrv::readChar();
+        commandSize++;
+    }
+
+    SpiDrv::spiSlaveDeselect();
+    //Wait the reply elaboration
+    SpiDrv::waitForSlaveReady();
+    SpiDrv::spiSlaveSelect();
+
+    // Wait for reply
+    uint8_t _data = 0;
+    uint8_t _dataLen = 0;
+    if (!SpiDrv::waitResponseCmd(IOT_SET_THING_ID, PARAM_NUMS_1, &_data, &_dataLen))
+    {
+        WARN("error waitResponse");
+        _data = WL_FAILURE;
+    }
+    SpiDrv::spiSlaveDeselect();
+
     return _data;
 }
 

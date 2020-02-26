@@ -106,142 +106,150 @@ int WiFiClass::begin(const char* ssid, const char *passphrase)
 
 int WiFiClass::iotBegin(const char* ssid, const char *passphrase, const char *mqtt_broker)
 {
-	uint8_t status = WL_IDLE_STATUS;
-
-    // set passphrase
-    if (WiFiDrv::iotCloudBegin(ssid, strlen(ssid), passphrase, strlen(passphrase), mqtt_broker, strlen(mqtt_broker))!= WL_FAILURE)
-    {
-			status = 1;
-    }else{
-    	status = -1;
-    }
-    return status;
+	if (WiFiDrv::iotCloudBegin(ssid, strlen(ssid), passphrase, strlen(passphrase), mqtt_broker, strlen(mqtt_broker))== WL_FAILURE)
+	{
+		return - 1;
+	}
+	return 1;
 }
 
 int WiFiClass::iotUpdate()
 {
-	uint8_t status = WL_IDLE_STATUS;
-
-    // set passphrase
-    if (WiFiDrv::iotCloudUpdate()!= WL_FAILURE)
-    {
-			status = 1;
-    }else{
-    	status = -1;
-    }
-    return status;
+	if (WiFiDrv::iotCloudUpdate()== WL_FAILURE)
+	{
+		return - 1;
+	}
+	return 1;
 }
 
 int WiFiClass::iotAddPropertyBool(const char* name, uint8_t permission_type, uint8_t seconds)
 {
-	uint8_t status = WL_IDLE_STATUS;
-
-    // set passphrase
-    if (WiFiDrv::iotCloudAddPropertyBool(name, strlen(name), permission_type, seconds)!= WL_FAILURE)
-    {
-			status = 1;
-    }else{
-    	status = -1;
-    }
-    return status;
+	if (WiFiDrv::iotCloudAddPropertyBool(name, strlen(name), permission_type, seconds)== WL_FAILURE)
+	{
+		return - 1;
+	}
+	return 1;
 }
 
 int WiFiClass::iotAddPropertyInt(const char* name, uint8_t permission_type, uint8_t seconds)
 {
-	uint8_t status = WL_IDLE_STATUS;
-
-    // set passphrase
-    if (WiFiDrv::iotCloudAddPropertyInt(name, strlen(name), permission_type, seconds)!= WL_FAILURE)
-    {
-			status = 1;
-    }else{
-    	status = -1;
-    }
-    return status;
+	if (WiFiDrv::iotCloudAddPropertyInt(name, strlen(name), permission_type, seconds)== WL_FAILURE)
+	{
+		return - 1;
+	}
+	return 1;
 }
 
 int WiFiClass::iotAddPropertyFloat(const char* name, uint8_t permission_type, uint8_t seconds)
 {
-	uint8_t status = WL_IDLE_STATUS;
-
-    // set passphrase
-    if (WiFiDrv::iotCloudAddPropertyFloat(name, strlen(name), permission_type, seconds)!= WL_FAILURE)
-    {
-			status = 1;
-    }else{
-    	status = -1;
-    }
-    return status;
+	if (WiFiDrv::iotCloudAddPropertyFloat(name, strlen(name), permission_type, seconds)== WL_FAILURE)
+	{
+		return - 1;
+	}
+	return 1;
 }
 
 int WiFiClass::iotAddPropertyString(const char* name, uint8_t permission_type, uint8_t seconds)
 {
-	uint8_t status = WL_IDLE_STATUS;
-
-    // set passphrase
-    if (WiFiDrv::iotCloudAddPropertyString(name, strlen(name), permission_type, seconds)!= WL_FAILURE)
-    {
-			status = 1;
-    }else{
-    	status = -1;
-    }
-    return status;
+	if (WiFiDrv::iotCloudAddPropertyString(name, strlen(name), permission_type, seconds)== WL_FAILURE)
+	{
+		return - 1;
+	}
+	return 1;
 }
 
 int WiFiClass::iotUpdatePropertyBool(const char* name, const bool value)
 {
-	uint8_t status = WL_IDLE_STATUS;
-
-    // set passphrase
-    if (WiFiDrv::iotCloudUpdatePropertyBool(name, strlen(name), value, sizeof(value))!= WL_FAILURE)
-    {
-			status = 1;
-    }else{
-    	status = -1;
-    }
-    return status;
+	if (WiFiDrv::iotCloudUpdatePropertyBool(name, strlen(name), value, sizeof(value))== WL_FAILURE)
+	{
+		return - 1;
+	}
+	return 1;
 }
 
 int WiFiClass::iotUpdatePropertyInt(const char* name, const int value)
 {
-	uint8_t status = WL_IDLE_STATUS;
+	uint8_t status = 0;
 
-    // set passphrase
-    if (WiFiDrv::iotCloudUpdatePropertyInt(name, strlen(name), value, sizeof(value))!= WL_FAILURE)
-    {
-			status = 1;
-    }else{
-    	status = -1;
-    }
-    return status;
+	if (WiFiDrv::iotCloudUpdatePropertyInt(name, strlen(name), value, sizeof(value))== WL_FAILURE)
+	{
+		return - 1;
+	}
+	return 1;
 }
 
 int WiFiClass::iotUpdatePropertyFloat(const char* name, const float value)
 {
-	uint8_t status = WL_IDLE_STATUS;
-
-    // set passphrase
-    if (WiFiDrv::iotCloudUpdatePropertyFloat(name, strlen(name), value, sizeof(value))!= WL_FAILURE)
-    {
-			status = 1;
-    }else{
-    	status = -1;
-    }
-    return status;
+	if (WiFiDrv::iotCloudUpdatePropertyFloat(name, strlen(name), value, sizeof(value))== WL_FAILURE)
+	{
+		return - 1;
+	}
+	return 1;
 }
 
-int WiFiClass::iotUpdatePropertyString(const char* name, const char*  value)
+int WiFiClass::iotUpdatePropertyString(const char* name, String  value)
 {
-	uint8_t status = WL_IDLE_STATUS;
+	if (WiFiDrv::iotCloudUpdatePropertyString(name, strlen(name), value, value.length())!= WL_FAILURE)
+	{
+		return - 1;
+	}
+	return 1;
+}
 
-    // set passphrase
-    if (WiFiDrv::iotCloudUpdatePropertyString(name, strlen(name), value, strlen(value))!= WL_FAILURE)
+bool WiFiClass::iotReadPropertyBool(const char* name)
+{
+	bool property;
+	property = WiFiDrv::iotCloudReadPropertyBool(name, strlen(name));
+
+	return property;
+}
+
+int WiFiClass::iotReadPropertyInt(const char* name)
+{
+	int property;
+	property = WiFiDrv::iotCloudReadPropertyInt(name, strlen(name));
+
+	return property;
+}
+
+float WiFiClass::iotReadPropertyFloat(const char* name)
+{
+	float property;
+	property = WiFiDrv::iotCloudReadPropertyFloat(name, strlen(name));
+
+	return property;
+}
+
+String WiFiClass::iotReadPropertyString(const char* name)
+{
+	String property;
+	property = WiFiDrv::iotCloudReadPropertyString(name, strlen(name));
+
+	return property;
+}
+
+int WiFiClass::iotSetThingId(const char* thing_id){
+    if (WiFiDrv::iotCloudSetThingId(thing_id, strlen(thing_id))== WL_FAILURE)
     {
-			status = 1;
-    }else{
-    	status = -1;
+			return - 1;
     }
-    return status;
+    return 1;
+}
+
+int WiFiClass::iotSetBoardId(const char* board_id){
+    if (WiFiDrv::iotCloudSetBoardId(board_id, strlen(board_id))== WL_FAILURE)
+    {
+			return - 1;
+    }
+    return 1;
+}
+
+int WiFiClass::iotSetSecretDeviceKey(const char* secret_key){
+    if (WiFiDrv::iotCloudSetSecretDeviceKey(secret_key, strlen(secret_key))== WL_FAILURE)
+    {
+			return - 1;
+    }
+    return 1;
 }
 
 uint8_t WiFiClass::beginAP(const char *ssid)

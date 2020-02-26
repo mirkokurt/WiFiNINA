@@ -83,8 +83,16 @@ public:
     int iotUpdatePropertyBool(const char* name, const bool value);
     int iotUpdatePropertyInt(const char* name, const int value);
     int iotUpdatePropertyFloat(const char* name, const float value);
-    int iotUpdatePropertyString(const char* name, const char* value);
+    int iotUpdatePropertyString(const char* name, String value);
+    bool iotReadPropertyBool(const char* name);
+    int iotReadPropertyInt(const char* name);
+    float iotReadPropertyFloat(const char* name);
+    String iotReadPropertyString(const char* name);
 
+    int iotSetThingId(const char* thing_id);
+    int iotSetBoardId(const char* board_id);
+    int iotSetSecretDeviceKey(const char* secret_key);
+    
     uint8_t beginAP(const char *ssid);
     uint8_t beginAP(const char *ssid, uint8_t channel);
     uint8_t beginAP(const char *ssid, const char* passphrase);
