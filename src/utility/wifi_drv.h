@@ -110,8 +110,8 @@ public:
      * return: WL_SUCCESS or WL_FAILURE
      */
     static int8_t wifiSetKey(const char* ssid, uint8_t ssid_len, uint8_t key_idx, const void *key, const uint8_t len);
-    
-    
+
+
     /* Initialize the ArduinoIoTCloud.
      * Configure ssid and key into the device.
      *
@@ -129,7 +129,7 @@ public:
      * Run the state machine of the iot cloud connection
      *
     */
-    static uint8_t iotCloudUpdate();
+    static uint8_t iotCloudUpdate(uint8_t * iotStatus, uint8_t * iotSyncStatus, uint8_t * connStatus);
 
     /* Add a property in ArduinoIoTCloud.
      *
@@ -159,7 +159,7 @@ public:
     static uint8_t iotCloudUpdatePropertyInt(const char* name, uint8_t name_len, const int value, uint8_t value_len);
     static uint8_t iotCloudUpdatePropertyFloat(const char* name, uint8_t name_len, const float value, uint8_t value_len);
     static uint8_t iotCloudUpdatePropertyString(const char* name, uint8_t name_len, const String value, uint8_t value_len);
-    
+
     /* Read the value of a property in ArduinoIoTCloud.
      *
      * param name: name of the property.
@@ -169,7 +169,7 @@ public:
     static int iotCloudReadPropertyInt(const char* name, uint8_t name_len);
     static float iotCloudReadPropertyFloat(const char* name, uint8_t name_len);
     static String iotCloudReadPropertyString(const char* name, uint8_t name_len);
-   
+
     static uint8_t iotCloudSetThingId(const char* thing_id, uint8_t thing_id_len);
     static uint8_t iotCloudSetBoardId(const char* board_id, uint8_t board_id_len);
     static uint8_t iotCloudSetSecretDeviceKey(const char* secret_key, uint8_t secret_key_len);

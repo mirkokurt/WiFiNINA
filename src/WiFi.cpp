@@ -113,9 +113,9 @@ int WiFiClass::iotBegin(const char* ssid, const char *passphrase, const char *mq
 	return 1;
 }
 
-int WiFiClass::iotUpdate()
+int WiFiClass::iotUpdate(uint8_t * iotStatus, uint8_t * iotSyncStatus, uint8_t * connStatus)
 {
-	if (WiFiDrv::iotCloudUpdate()== WL_FAILURE)
+	if (!WiFiDrv::iotCloudUpdate(iotStatus, iotSyncStatus, connStatus))
 	{
 		return - 1;
 	}
@@ -389,7 +389,7 @@ uint8_t* WiFiClass::macAddress(uint8_t* mac)
 	memcpy(mac, _mac, WL_MAC_ADDR_LENGTH);
     return mac;
 }
-   
+
 IPAddress WiFiClass::localIP()
 {
 	IPAddress ret;

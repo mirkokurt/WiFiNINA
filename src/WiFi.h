@@ -75,7 +75,7 @@ public:
      */
     int begin(const char* ssid, const char *passphrase);
     int iotBegin(const char* ssid, const char *passphrase, const char *mqtt_broker);
-    int iotUpdate();
+    int iotUpdate(uint8_t * iotStatus, uint8_t * iotSyncStatus, uint8_t * connStatus);
     int iotAddPropertyBool(const char* name, uint8_t permission_type, uint8_t seconds);
     int iotAddPropertyInt(const char* name, uint8_t permission_type, uint8_t seconds);
     int iotAddPropertyFloat(const char* name, uint8_t permission_type, uint8_t seconds);
@@ -92,7 +92,7 @@ public:
     int iotSetThingId(const char* thing_id);
     int iotSetBoardId(const char* board_id);
     int iotSetSecretDeviceKey(const char* secret_key);
-    
+
     uint8_t beginAP(const char *ssid);
     uint8_t beginAP(const char *ssid, uint8_t channel);
     uint8_t beginAP(const char *ssid, const char* passphrase);
