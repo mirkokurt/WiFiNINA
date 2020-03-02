@@ -626,7 +626,7 @@ uint8_t WiFiDrv::iotCloudSetBoardId(const char* board_id, uint8_t board_id_len)
 {
     WAIT_FOR_SLAVE_SELECT();
     // Send Command
-    SpiDrv::sendCmd(IOT_SET_THING_ID, PARAM_NUMS_1);
+    SpiDrv::sendCmd(IOT_SET_BOARD_ID, PARAM_NUMS_1);
     SpiDrv::sendParam((uint8_t*)board_id, board_id_len, LAST_PARAM);
 
     // pad to multiple of 4
@@ -644,7 +644,7 @@ uint8_t WiFiDrv::iotCloudSetBoardId(const char* board_id, uint8_t board_id_len)
     // Wait for reply
     uint8_t _data = 0;
     uint8_t _dataLen = 0;
-    if (!SpiDrv::waitResponseCmd(IOT_SET_THING_ID, PARAM_NUMS_1, &_data, &_dataLen))
+    if (!SpiDrv::waitResponseCmd(IOT_SET_BOARD_ID, PARAM_NUMS_1, &_data, &_dataLen))
     {
         WARN("error waitResponse");
         _data = WL_FAILURE;
@@ -658,7 +658,7 @@ uint8_t WiFiDrv::iotCloudSetSecretDeviceKey(const char* secret_key, uint8_t secr
 {
     WAIT_FOR_SLAVE_SELECT();
     // Send Command
-    SpiDrv::sendCmd(IOT_SET_THING_ID, PARAM_NUMS_1);
+    SpiDrv::sendCmd(IOT_SET_SECRET_KEY, PARAM_NUMS_1);
     SpiDrv::sendParam((uint8_t*)secret_key, secret_key_len, LAST_PARAM);
 
     // pad to multiple of 4
@@ -676,7 +676,7 @@ uint8_t WiFiDrv::iotCloudSetSecretDeviceKey(const char* secret_key, uint8_t secr
     // Wait for reply
     uint8_t _data = 0;
     uint8_t _dataLen = 0;
-    if (!SpiDrv::waitResponseCmd(IOT_SET_THING_ID, PARAM_NUMS_1, &_data, &_dataLen))
+    if (!SpiDrv::waitResponseCmd(IOT_SET_SECRET_KEY, PARAM_NUMS_1, &_data, &_dataLen))
     {
         WARN("error waitResponse");
         _data = WL_FAILURE;
