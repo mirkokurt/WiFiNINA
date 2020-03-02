@@ -158,7 +158,7 @@ int WiFiClass::iotAddPropertyString(const char* name, uint8_t permission_type, u
 	return 1;
 }
 
-int WiFiClass::iotUpdatePropertyBool(const char* name, const bool value)
+int WiFiClass::iotWritePropertyBool(const char* name, const bool value)
 {
 	if (WiFiDrv::iotCloudUpdatePropertyBool(name, strlen(name), value, sizeof(value))== WL_FAILURE)
 	{
@@ -167,7 +167,7 @@ int WiFiClass::iotUpdatePropertyBool(const char* name, const bool value)
 	return 1;
 }
 
-int WiFiClass::iotUpdatePropertyInt(const char* name, const int value)
+int WiFiClass::iotWritePropertyInt(const char* name, const int value)
 {
 	uint8_t status = 0;
 
@@ -178,7 +178,7 @@ int WiFiClass::iotUpdatePropertyInt(const char* name, const int value)
 	return 1;
 }
 
-int WiFiClass::iotUpdatePropertyFloat(const char* name, const float value)
+int WiFiClass::iotWritePropertyFloat(const char* name, const float value)
 {
 	if (WiFiDrv::iotCloudUpdatePropertyFloat(name, strlen(name), value, sizeof(value))== WL_FAILURE)
 	{
@@ -187,7 +187,7 @@ int WiFiClass::iotUpdatePropertyFloat(const char* name, const float value)
 	return 1;
 }
 
-int WiFiClass::iotUpdatePropertyString(const char* name, String  value)
+int WiFiClass::iotWritePropertyString(const char* name, String  value)
 {
 	if (WiFiDrv::iotCloudUpdatePropertyString(name, strlen(name), value, value.length())!= WL_FAILURE)
 	{

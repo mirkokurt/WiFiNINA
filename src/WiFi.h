@@ -80,10 +80,10 @@ public:
     int iotAddPropertyInt(const char* name, uint8_t permission_type, uint8_t seconds);
     int iotAddPropertyFloat(const char* name, uint8_t permission_type, uint8_t seconds);
     int iotAddPropertyString(const char* name, uint8_t permission_type, uint8_t seconds);
-    int iotUpdatePropertyBool(const char* name, const bool value);
-    int iotUpdatePropertyInt(const char* name, const int value);
-    int iotUpdatePropertyFloat(const char* name, const float value);
-    int iotUpdatePropertyString(const char* name, String value);
+    int iotWritePropertyBool(const char* name, const bool value);
+    int iotWritePropertyInt(const char* name, const int value);
+    int iotWritePropertyFloat(const char* name, const float value);
+    int iotWritePropertyString(const char* name, String value);
     bool iotReadPropertyBool(const char* name);
     int iotReadPropertyInt(const char* name);
     float iotReadPropertyFloat(const char* name);
