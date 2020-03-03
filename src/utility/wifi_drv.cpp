@@ -272,27 +272,27 @@ uint8_t WiFiDrv::iotCloudUpdate(uint8_t * iotStatus, uint8_t * iotSyncStatus, ui
     return retval;
 }
 
-uint8_t WiFiDrv::iotCloudAddPropertyBool(const char* name, uint8_t name_len, uint8_t permission_type, uint8_t seconds)
+uint8_t WiFiDrv::iotCloudAddPropertyBool(const char* name, uint8_t name_len, uint8_t permission_type, long seconds)
 {
     return iotCloudAddProperty(1, name, name_len, permission_type, seconds);
 }
 
-uint8_t WiFiDrv::iotCloudAddPropertyInt(const char* name, uint8_t name_len, uint8_t permission_type, uint8_t seconds)
+uint8_t WiFiDrv::iotCloudAddPropertyInt(const char* name, uint8_t name_len, uint8_t permission_type, long seconds)
 {
     return iotCloudAddProperty(2, name, name_len, permission_type, seconds);
 }
 
-uint8_t WiFiDrv::iotCloudAddPropertyFloat(const char* name, uint8_t name_len, uint8_t permission_type, uint8_t seconds)
+uint8_t WiFiDrv::iotCloudAddPropertyFloat(const char* name, uint8_t name_len, uint8_t permission_type, long seconds)
 {
     return iotCloudAddProperty(3, name, name_len, permission_type, seconds);
 }
 
-uint8_t WiFiDrv::iotCloudAddPropertyString(const char* name, uint8_t name_len, uint8_t permission_type, uint8_t seconds)
+uint8_t WiFiDrv::iotCloudAddPropertyString(const char* name, uint8_t name_len, uint8_t permission_type, long seconds)
 {
     return iotCloudAddProperty(4, name, name_len, permission_type, seconds);
 }
 
-uint8_t WiFiDrv::iotCloudAddProperty(uint8_t property_type, const char* name, uint8_t name_len, uint8_t permission_type, uint8_t seconds)
+uint8_t WiFiDrv::iotCloudAddProperty(uint8_t property_type, const char* name, uint8_t name_len, uint8_t permission_type, long seconds)
 {
 	WAIT_FOR_SLAVE_SELECT();
     // Send Command
@@ -300,7 +300,7 @@ uint8_t WiFiDrv::iotCloudAddProperty(uint8_t property_type, const char* name, ui
     SpiDrv::sendParam(&property_type, 1, NO_LAST_PARAM);
     SpiDrv::sendParam((uint8_t*)name, name_len, NO_LAST_PARAM);
     SpiDrv::sendParam(&permission_type, 1, NO_LAST_PARAM);
-    SpiDrv::sendParam(&seconds, 1, LAST_PARAM);
+    SpiDrv::sendParam((uint8_t*)&seconds, sizeof(seconds), LAST_PARAM);
 
     // pad to multiple of 4
     int commandSize = 9 + name_len;
@@ -326,11 +326,11 @@ uint8_t WiFiDrv::iotCloudAddProperty(uint8_t property_type, const char* name, ui
     return _data;
 }
 
-uint8_t WiFiDrv::iotCloudUpdatePropertyBool(const char* name, uint8_t name_len, const bool value, uint8_t value_len)
+uint8_t WiFiDrv::iotCloudWritePropertyBool(const char* name, uint8_t name_len, const bool value, uint8_t value_len)
 {
     WAIT_FOR_SLAVE_SELECT();
     // Send Command
-    SpiDrv::sendCmd(IOT_UPDATE_BOOL, PARAM_NUMS_2);
+    SpiDrv::sendCmd(IOT_WRITE_BOOL, PARAM_NUMS_2);
     SpiDrv::sendParam((uint8_t*)name, name_len, NO_LAST_PARAM);
     SpiDrv::sendParam((uint8_t*)&value, value_len, LAST_PARAM);
 
@@ -349,7 +349,7 @@ uint8_t WiFiDrv::iotCloudUpdatePropertyBool(const char* name, uint8_t name_len, 
     // Wait for reply
     uint8_t _data = 0;
     uint8_t _dataLen = 0;
-    if (!SpiDrv::waitResponseCmd(IOT_UPDATE_BOOL, PARAM_NUMS_1, &_data, &_dataLen))
+    if (!SpiDrv::waitResponseCmd(IOT_WRITE_BOOL, PARAM_NUMS_1, &_data, &_dataLen))
     {
         WARN("error waitResponse");
         _data = WL_FAILURE;
@@ -358,11 +358,11 @@ uint8_t WiFiDrv::iotCloudUpdatePropertyBool(const char* name, uint8_t name_len, 
     return _data;
 }
 
-uint8_t WiFiDrv::iotCloudUpdatePropertyInt(const char* name, uint8_t name_len, const int value, uint8_t value_len)
+uint8_t WiFiDrv::iotCloudWritePropertyInt(const char* name, uint8_t name_len, const int value, uint8_t value_len)
 {
     WAIT_FOR_SLAVE_SELECT();
     // Send Command
-    SpiDrv::sendCmd(IOT_UPDATE_INT, PARAM_NUMS_2);
+    SpiDrv::sendCmd(IOT_WRITE_INT, PARAM_NUMS_2);
     SpiDrv::sendParam((uint8_t*)name, name_len, NO_LAST_PARAM);
     SpiDrv::sendParam((uint8_t*)&value, value_len, LAST_PARAM);
 
@@ -381,7 +381,7 @@ uint8_t WiFiDrv::iotCloudUpdatePropertyInt(const char* name, uint8_t name_len, c
     // Wait for reply
     uint8_t _data = 0;
     uint8_t _dataLen = 0;
-    if (!SpiDrv::waitResponseCmd(IOT_UPDATE_INT, PARAM_NUMS_1, &_data, &_dataLen))
+    if (!SpiDrv::waitResponseCmd(IOT_WRITE_INT, PARAM_NUMS_1, &_data, &_dataLen))
     {
         WARN("error waitResponse");
         _data = WL_FAILURE;
@@ -390,11 +390,11 @@ uint8_t WiFiDrv::iotCloudUpdatePropertyInt(const char* name, uint8_t name_len, c
     return _data;
 }
 
-uint8_t WiFiDrv::iotCloudUpdatePropertyFloat(const char* name, uint8_t name_len, const float value, uint8_t value_len)
+uint8_t WiFiDrv::iotCloudWritePropertyFloat(const char* name, uint8_t name_len, const float value, uint8_t value_len)
 {
     WAIT_FOR_SLAVE_SELECT();
     // Send Command
-    SpiDrv::sendCmd(IOT_UPDATE_FLOAT, PARAM_NUMS_2);
+    SpiDrv::sendCmd(IOT_WRITE_FLOAT, PARAM_NUMS_2);
     SpiDrv::sendParam((uint8_t*)name, name_len, NO_LAST_PARAM);
     SpiDrv::sendParam((uint8_t*)&value, value_len, LAST_PARAM);
 
@@ -413,7 +413,7 @@ uint8_t WiFiDrv::iotCloudUpdatePropertyFloat(const char* name, uint8_t name_len,
     // Wait for reply
     uint8_t _data = 0;
     uint8_t _dataLen = 0;
-    if (!SpiDrv::waitResponseCmd(IOT_UPDATE_FLOAT, PARAM_NUMS_1, &_data, &_dataLen))
+    if (!SpiDrv::waitResponseCmd(IOT_WRITE_FLOAT, PARAM_NUMS_1, &_data, &_dataLen))
     {
         WARN("error waitResponse");
         _data = WL_FAILURE;
@@ -422,11 +422,11 @@ uint8_t WiFiDrv::iotCloudUpdatePropertyFloat(const char* name, uint8_t name_len,
     return _data;
 }
 
-uint8_t WiFiDrv::iotCloudUpdatePropertyString(const char* name, uint8_t name_len, String value, uint8_t value_len)
+uint8_t WiFiDrv::iotCloudWritePropertyString(const char* name, uint8_t name_len, String value, uint8_t value_len)
 {
     WAIT_FOR_SLAVE_SELECT();
     // Send Command
-    SpiDrv::sendCmd(IOT_UPDATE_STRING, PARAM_NUMS_2);
+    SpiDrv::sendCmd(IOT_WRITE_STRING, PARAM_NUMS_2);
     SpiDrv::sendParam((uint8_t*)name, name_len, NO_LAST_PARAM);
     SpiDrv::sendParam((uint8_t*)&value, value_len, LAST_PARAM);
 
@@ -445,7 +445,7 @@ uint8_t WiFiDrv::iotCloudUpdatePropertyString(const char* name, uint8_t name_len
     // Wait for reply
     uint8_t _data = 0;
     uint8_t _dataLen = 0;
-    if (!SpiDrv::waitResponseCmd(IOT_UPDATE_STRING, PARAM_NUMS_1, &_data, &_dataLen))
+    if (!SpiDrv::waitResponseCmd(IOT_WRITE_STRING, PARAM_NUMS_1, &_data, &_dataLen))
     {
         WARN("error waitResponse");
         _data = WL_FAILURE;

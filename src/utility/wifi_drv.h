@@ -138,15 +138,15 @@ public:
      * param permission: 1 READ, 2 WRITE, 3 READWRITE.
      * param seconds: how many seconds to wait between two update of the cloud value.
      */
-    static uint8_t iotCloudAddPropertyBool(const char* name, uint8_t name_len, uint8_t permission_type, uint8_t seconds);
-    static uint8_t iotCloudAddPropertyInt(const char* name, uint8_t name_len, uint8_t permission_type, uint8_t seconds);
-    static uint8_t iotCloudAddPropertyFloat(const char* name, uint8_t name_len, uint8_t permission_type, uint8_t seconds);
-    static uint8_t iotCloudAddPropertyString(const char* name, uint8_t name_len, uint8_t permission_type, uint8_t seconds);
+    static uint8_t iotCloudAddPropertyBool(const char* name, uint8_t name_len, uint8_t permission_type, long seconds);
+    static uint8_t iotCloudAddPropertyInt(const char* name, uint8_t name_len, uint8_t permission_type, long seconds);
+    static uint8_t iotCloudAddPropertyFloat(const char* name, uint8_t name_len, uint8_t permission_type, long seconds);
+    static uint8_t iotCloudAddPropertyString(const char* name, uint8_t name_len, uint8_t permission_type, long seconds);
     /* Add a property in ArduinoIoTCloud.
      *
      * param property_type: identifier of the property type 1:bool, 2:int, 3:float, 4:string
      */
-    static uint8_t iotCloudAddProperty(uint8_t property_type, const char* name, uint8_t name_len, uint8_t permission_type, uint8_t seconds);
+    static uint8_t iotCloudAddProperty(uint8_t property_type, const char* name, uint8_t name_len, uint8_t permission_type, long seconds);
 
     /* Update the value of a property in ArduinoIoTCloud.
      *
@@ -155,10 +155,10 @@ public:
      * param value: value of the property
      * param value_length: length of the value of the property
      */
-    static uint8_t iotCloudUpdatePropertyBool(const char* name, uint8_t name_len, const bool value, uint8_t value_len);
-    static uint8_t iotCloudUpdatePropertyInt(const char* name, uint8_t name_len, const int value, uint8_t value_len);
-    static uint8_t iotCloudUpdatePropertyFloat(const char* name, uint8_t name_len, const float value, uint8_t value_len);
-    static uint8_t iotCloudUpdatePropertyString(const char* name, uint8_t name_len, const String value, uint8_t value_len);
+    static uint8_t iotCloudWritePropertyBool(const char* name, uint8_t name_len, const bool value, uint8_t value_len);
+    static uint8_t iotCloudWritePropertyInt(const char* name, uint8_t name_len, const int value, uint8_t value_len);
+    static uint8_t iotCloudWritePropertyFloat(const char* name, uint8_t name_len, const float value, uint8_t value_len);
+    static uint8_t iotCloudWritePropertyString(const char* name, uint8_t name_len, const String value, uint8_t value_len);
 
     /* Read the value of a property in ArduinoIoTCloud.
      *
