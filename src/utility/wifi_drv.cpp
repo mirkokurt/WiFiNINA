@@ -473,17 +473,13 @@ bool WiFiDrv::iotCloudReadPropertyBool(const char* name, uint8_t name_len)
     SpiDrv::waitForSlaveReady();
     SpiDrv::spiSlaveSelect();
 
-    // Wait for reply
-    uint8_t _data = 0;
+    bool b;
+
+    uint8_t _data[sizeof(b)];
     uint8_t _dataLen = 0;
-    if (!SpiDrv::waitResponseCmd(IOT_READ_BOOL, PARAM_NUMS_1, &_data, &_dataLen))
-    {
-        WARN("error waitResponse");
-        _data = WL_FAILURE;
-    }
+    SpiDrv::waitResponseCmd(IOT_READ_BOOL, PARAM_NUMS_1, _data, &_dataLen);
     SpiDrv::spiSlaveDeselect();
 
-    bool b;
     memcpy(&b, &_data, sizeof(b));
     return b;
 }
@@ -507,17 +503,14 @@ int WiFiDrv::iotCloudReadPropertyInt(const char* name, uint8_t name_len)
     SpiDrv::waitForSlaveReady();
     SpiDrv::spiSlaveSelect();
 
-    // Wait for reply
-    uint8_t _data = 0;
+    int i;
+ 
+    uint8_t _data[sizeof(i)];
     uint8_t _dataLen = 0;
-    if (!SpiDrv::waitResponseCmd(IOT_READ_FLOAT, PARAM_NUMS_1, &_data, &_dataLen))
-    {
-        WARN("error waitResponse");
-        _data = WL_FAILURE;
-    }
+
+    SpiDrv::waitResponseCmd(IOT_READ_FLOAT, PARAM_NUMS_1, _data, &_dataLen);
     SpiDrv::spiSlaveDeselect();
 
-    int i;
     memcpy(&i, &_data, sizeof(i));
     return i;
 }
@@ -541,10 +534,10 @@ float WiFiDrv::iotCloudReadPropertyFloat(const char* name, uint8_t name_len)
     SpiDrv::waitForSlaveReady();
     SpiDrv::spiSlaveSelect();
 
-    // Wait for reply
     float f;
-    uint8_t _dataLen = sizeof(f);
+
     uint8_t _data[sizeof(f)];
+    uint8_t _dataLen = 0;
     
     SpiDrv::waitResponseCmd(IOT_READ_FLOAT, PARAM_NUMS_1, _data, &_dataLen);
     SpiDrv::spiSlaveDeselect();
@@ -572,19 +565,14 @@ String WiFiDrv::iotCloudReadPropertyString(const char* name, uint8_t name_len)
     SpiDrv::waitForSlaveReady();
     SpiDrv::spiSlaveSelect();
 
-    // Wait for reply
-    uint8_t _data = 0;
+    String s;
+    unsigned char _data[255];
     uint8_t _dataLen = 0;
-    if (!SpiDrv::waitResponseCmd(IOT_READ_STRING, PARAM_NUMS_1, &_data, &_dataLen))
-    {
-        WARN("error waitResponse");
-        _data = WL_FAILURE;
-    }
+    SpiDrv::waitResponseCmd(IOT_READ_STRING, PARAM_NUMS_1, _data, &_dataLen);
     SpiDrv::spiSlaveDeselect();
 
-    String s;
-    memcpy(&s, &_data, _dataLen);
-    return s;
+    //memcpy(&s, &_data, _dataLen);
+    return String((char *)_data);
 }
 
 uint8_t WiFiDrv::iotCloudSetThingId(const char* thing_id, uint8_t thing_id_len)
