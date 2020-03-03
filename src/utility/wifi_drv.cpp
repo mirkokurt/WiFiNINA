@@ -542,17 +542,18 @@ float WiFiDrv::iotCloudReadPropertyFloat(const char* name, uint8_t name_len)
     SpiDrv::spiSlaveSelect();
 
     // Wait for reply
-    uint8_t _data = 0;
-    uint8_t _dataLen = 0;
-    if (!SpiDrv::waitResponseCmd(IOT_READ_FLOAT, PARAM_NUMS_1, &_data, &_dataLen))
+    float f;
+    uint8_t _dataLen = sizeof(f);
+    uint8_t _data[sizeof(f)];
+    
+    if (!SpiDrv::waitResponseCmd(IOT_READ_FLOAT, PARAM_NUMS_1, _data, &_dataLen))
     {
         WARN("error waitResponse");
         _data = WL_FAILURE;
     }
     SpiDrv::spiSlaveDeselect();
 
-    float f;
-    memcpy(&f, &_data, sizeof(f));
+    memcpy(&f, _data, sizeof(f));
     return f;
 }
 
