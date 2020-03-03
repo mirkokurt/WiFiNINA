@@ -427,7 +427,7 @@ uint8_t WiFiDrv::iotCloudWritePropertyString(const char* name, uint8_t name_len,
     WAIT_FOR_SLAVE_SELECT();
     // Send Command
 
-    char * array;
+    const char * array;
     array = value.c_str();
 
     SpiDrv::sendCmd(IOT_WRITE_STRING, PARAM_NUMS_2);
