@@ -196,36 +196,40 @@ int WiFiClass::iotWritePropertyString(const char* name, String  value)
 	return 1;
 }
 
-bool WiFiClass::iotReadPropertyBool(const char* name)
+int WiFiClass::iotReadPropertyBool(const char* name, bool * value, unsigned long * cloudTimestamp)
 {
-	bool property;
-	property = WiFiDrv::iotCloudReadPropertyBool(name, strlen(name) + 1);
-
-	return property;
+	if (WiFiDrv::iotCloudReadPropertyBool(name, strlen(name) + 1, value, cloudTimestamp)!= WL_FAILURE)
+	{
+		return - 1;
+	}
+	return 1;
 }
 
-int WiFiClass::iotReadPropertyInt(const char* name)
+int WiFiClass::iotReadPropertyInt(const char* name, int * value, unsigned long * cloudTimestamp)
 {
-	int property;
-	property = WiFiDrv::iotCloudReadPropertyInt(name, strlen(name) + 1);
-
-	return property;
+	if (WiFiDrv::iotCloudReadPropertyInt(name, strlen(name) + 1, value, cloudTimestamp)!= WL_FAILURE)
+	{
+		return - 1;
+	}
+	return 1;
 }
 
-float WiFiClass::iotReadPropertyFloat(const char* name)
+int WiFiClass::iotReadPropertyFloat(const char* name, float * value, unsigned long * cloudTimestamp)
 {
-	float property;
-	property = WiFiDrv::iotCloudReadPropertyFloat(name, strlen(name) + 1);
-
-	return property;
+	if (WiFiDrv::iotCloudReadPropertyFloat(name, strlen(name) + 1, value, cloudTimestamp)!= WL_FAILURE)
+	{
+		return - 1;
+	}
+	return 1;
 }
 
-String WiFiClass::iotReadPropertyString(const char* name)
+int WiFiClass::iotReadPropertyString(const char* name, String * value, unsigned long * cloudTimestamp)
 {
-	String property;
-	property = WiFiDrv::iotCloudReadPropertyString(name, strlen(name) + 1);
-
-	return property;
+	if (WiFiDrv::iotCloudReadPropertyString(name, strlen(name) + 1, value, cloudTimestamp)!= WL_FAILURE)
+	{
+		return - 1;
+	}
+	return 1;
 }
 
 int WiFiClass::iotSetThingId(const char* thing_id){
