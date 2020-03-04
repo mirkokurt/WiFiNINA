@@ -432,7 +432,7 @@ uint8_t WiFiDrv::iotCloudWritePropertyString(const char* name, uint8_t name_len,
 
     SpiDrv::sendCmd(IOT_WRITE_STRING, PARAM_NUMS_2);
     SpiDrv::sendParam((uint8_t*)name, name_len, NO_LAST_PARAM);
-    SpiDrv::sendParam((uint8_t*)array, value_len, LAST_PARAM);
+    SpiDrv::sendParam((uint8_t*)array, value_len + 1, LAST_PARAM);
 
     // pad to multiple of 4
     int commandSize = 6 + name_len + value_len;
@@ -508,7 +508,7 @@ int WiFiDrv::iotCloudReadPropertyInt(const char* name, uint8_t name_len)
     SpiDrv::spiSlaveSelect();
 
     int i;
- 
+
     uint8_t _data[sizeof(i)];
     uint8_t _dataLen = 0;
 
@@ -542,7 +542,7 @@ float WiFiDrv::iotCloudReadPropertyFloat(const char* name, uint8_t name_len)
 
     uint8_t _data[sizeof(f)];
     uint8_t _dataLen = 0;
-    
+
     SpiDrv::waitResponseCmd(IOT_READ_FLOAT, PARAM_NUMS_1, _data, &_dataLen);
     SpiDrv::spiSlaveDeselect();
 
