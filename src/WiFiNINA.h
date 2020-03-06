@@ -20,6 +20,6 @@
 #ifndef WiFiNINA_h
 #define WiFiNINA_h
 
-#include "WiFi.h"
+#include "WifiEsp.h"
 
 #endif

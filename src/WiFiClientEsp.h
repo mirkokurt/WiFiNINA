@@ -1,5 +1,5 @@
 /*
-  WiFiServer.h - Library for Arduino Wifi shield.
+  WiFiClient.cpp - Library for Arduino Wifi shield.
   Copyright (c) 2018 Arduino SA. All rights reserved.
   Copyright (c) 2011-2014 Arduino LLC.  All right reserved.
 
@@ -18,32 +18,47 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#ifndef wifiserver_h
-#define wifiserver_h
+#ifndef wificlient_h
+#define wificlient_h
+#include "Arduino.h"	
+#include "Print.h"
+#include "Client.h"
+#include "IPAddress.h"
 
-extern "C" {
-  #include "utility/wl_definitions.h"
-}
+class WiFiClient : public Client {
 
-#include "Server.h"
-
-class WiFiClient;
-
-class WiFiServer : public Server {
-private:
-  uint8_t _sock;
-  uint8_t _lastSock;
-  uint16_t _port;
-  void*     pcb;
 public:
-  WiFiServer(uint16_t);
-  WiFiClient available(uint8_t* status = NULL);
-  void begin();
+  WiFiClient();
+  WiFiClient(uint8_t sock);
+
+  uint8_t status();
+  virtual int connect(IPAddress ip, uint16_t port);
+  virtual int connect(const char *host, uint16_t port);
+  virtual int connectSSL(IPAddress ip, uint16_t port);
+  virtual int connectSSL(const char *host, uint16_t port);
   virtual size_t write(uint8_t);
   virtual size_t write(const uint8_t *buf, size_t size);
-  uint8_t status();
+  virtual int available();
+  virtual int read();
+  virtual int read(uint8_t *buf, size_t size);
+  virtual int peek();
+  virtual void flush();
+  virtual void stop();
+  virtual uint8_t connected();
+  virtual operator bool();
+
+  virtual IPAddress remoteIP();
+  virtual uint16_t remotePort();
+
+  friend class WiFiServer;
+  friend class WiFiDrv;
 
   using Print::write;
+
+private:
+  static uint16_t _srcport;
+  uint8_t _sock;   //not used
+  uint16_t  _socket;
 };
 
 #endif
