@@ -17,24 +17,9 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#include "WiFiSSLClient.h"
+#ifndef WiFiNINALite_h
+#define WiFiNINALite_h
 
-WiFiSSLClient::WiFiSSLClient() : 
-	WiFiClient()
-{
-}
+#include "WiFiLite.h"
 
-WiFiSSLClient::WiFiSSLClient(uint8_t sock) :
-	WiFiClient(sock)
-{  
-}
-
-int WiFiSSLClient::connect(IPAddress ip, uint16_t port)
-{
-	return WiFiClient::connectSSL(ip, port);
-}
-
-int WiFiSSLClient::connect(const char* host, uint16_t port)
-{
-	return WiFiClient::connectSSL(host, port);
-}
+#endif
