@@ -126,37 +126,42 @@ int WiFiLiteClass::iotWritePropertyString(const char* name, String  value)
 	return 1;
 }
 
-bool WiFiLiteClass::iotReadPropertyBool(const char* name)
+int WiFiLiteClass::iotReadPropertyBool(const char* name, bool * value, unsigned long * cloudTimestamp)
 {
-	bool property;
-	property = WiFiDrv::iotCloudReadPropertyBool(name, strlen(name) + 1);
-
-	return property;
+	if (WiFiDrv::iotCloudReadPropertyBool(name, strlen(name) + 1, value, cloudTimestamp)!= WL_FAILURE)
+	{
+		return - 1;
+	}
+	return 1;
 }
 
-int WiFiLiteClass::iotReadPropertyInt(const char* name)
+int WiFiLiteClass::iotReadPropertyInt(const char* name, int * value, unsigned long * cloudTimestamp)
 {
-	int property;
-	property = WiFiDrv::iotCloudReadPropertyInt(name, strlen(name) + 1);
-
-	return property;
+	if (WiFiDrv::iotCloudReadPropertyInt(name, strlen(name) + 1, value, cloudTimestamp)!= WL_FAILURE)
+	{
+		return - 1;
+	}
+	return 1;
 }
 
-float WiFiLiteClass::iotReadPropertyFloat(const char* name)
+int WiFiLiteClass::iotReadPropertyFloat(const char* name, float * value, unsigned long * cloudTimestamp)
 {
-	float property;
-	property = WiFiDrv::iotCloudReadPropertyFloat(name, strlen(name) + 1);
-
-	return property;
+	if (WiFiDrv::iotCloudReadPropertyFloat(name, strlen(name) + 1, value, cloudTimestamp)!= WL_FAILURE)
+	{
+		return - 1;
+	}
+	return 1;
 }
 
-String WiFiLiteClass::iotReadPropertyString(const char* name)
+int WiFiLiteClass::iotReadPropertyString(const char* name, String * value, unsigned long * cloudTimestamp)
 {
-	String property;
-	property = WiFiDrv::iotCloudReadPropertyString(name, strlen(name) + 1);
-
-	return property;
+	if (WiFiDrv::iotCloudReadPropertyString(name, strlen(name) + 1, value, cloudTimestamp)!= WL_FAILURE)
+	{
+		return - 1;
+	}
+	return 1;
 }
+
 
 int WiFiLiteClass::iotSetThingId(const char* thing_id){
     if (WiFiDrv::iotCloudSetThingId(thing_id, strlen(thing_id) + 1)== WL_FAILURE)

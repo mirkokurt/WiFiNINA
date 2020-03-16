@@ -95,10 +95,10 @@ public:
      * param name: name of the property.
      * param name_len: Lenght of the name of the property.
      */
-    static bool iotCloudReadPropertyBool(const char* name, uint8_t name_len);
-    static int iotCloudReadPropertyInt(const char* name, uint8_t name_len);
-    static float iotCloudReadPropertyFloat(const char* name, uint8_t name_len);
-    static String iotCloudReadPropertyString(const char* name, uint8_t name_len);
+    static uint8_t iotCloudReadPropertyBool(const char* name, uint8_t name_len, bool * value, unsigned long * cloudTimestamp);
+    static uint8_t iotCloudReadPropertyInt(const char* name, uint8_t name_len, int * value, unsigned long * cloudTimestamp);
+    static uint8_t iotCloudReadPropertyFloat(const char* name, uint8_t name_len, float * value, unsigned long * cloudTimestamp);
+    static uint8_t iotCloudReadPropertyString(const char* name, uint8_t name_len, String * value, unsigned long * cloudTimestamp);
 
     static uint8_t iotCloudSetThingId(const char* thing_id, uint8_t thing_id_len);
     static uint8_t iotCloudSetBoardId(const char* board_id, uint8_t board_id_len);
