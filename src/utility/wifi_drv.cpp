@@ -285,7 +285,10 @@ uint8_t WiFiDrv::iotCloudWritePropertyString(const char* name, uint8_t name_len,
 
 uint8_t WiFiDrv::iotCloudReadPropertyBool(const char* name, uint8_t name_len, bool * value, unsigned long * cloudTimestamp)
 {
-    tParam params[PARAM_NUMS_2] = { {0, (char *)value }, {0, (char *)cloudTimestamp} };
+    uint8_t _data1[sizeof(value)];
+    uint8_t _data2[sizeof(cloudTimestamp)];
+
+    tParam params[PARAM_NUMS_2] = { {0, (char *)_data1 }, {0, (char *)_data2} };
     WAIT_FOR_SLAVE_SELECT();
     // Send Command
     SpiDrv::sendCmd(IOT_READ_BOOL, PARAM_NUMS_1);
@@ -311,12 +314,18 @@ uint8_t WiFiDrv::iotCloudReadPropertyBool(const char* name, uint8_t name_len, bo
 
     SpiDrv::spiSlaveDeselect();
 
+    memcpy(&value, &_data1, sizeof(value));
+    memcpy(&cloudTimestamp, &_data2, sizeof(cloudTimestamp));
+
     return retval;
 }
 
 uint8_t WiFiDrv::iotCloudReadPropertyInt(const char* name, uint8_t name_len, int * value, unsigned long * cloudTimestamp)
 {
-    tParam params[PARAM_NUMS_2] = { {0, (char *)value }, {0, (char *)cloudTimestamp} };
+    uint8_t _data1[sizeof(value)];
+    uint8_t _data2[sizeof(cloudTimestamp)];
+
+    tParam params[PARAM_NUMS_2] = { {0, (char *)_data1 }, {0, (char *)_data2} };
     WAIT_FOR_SLAVE_SELECT();
     // Send Command
     SpiDrv::sendCmd(IOT_READ_INT, PARAM_NUMS_1);
@@ -342,12 +351,18 @@ uint8_t WiFiDrv::iotCloudReadPropertyInt(const char* name, uint8_t name_len, int
 
     SpiDrv::spiSlaveDeselect();
 
+    memcpy(&value, &_data1, sizeof(value));
+    memcpy(&cloudTimestamp, &_data2, sizeof(cloudTimestamp));
+
     return retval;
 }
 
 uint8_t WiFiDrv::iotCloudReadPropertyFloat(const char* name, uint8_t name_len, float * value, unsigned long * cloudTimestamp)
 {
-    tParam params[PARAM_NUMS_2] = { {0, (char *)value }, {0, (char *)cloudTimestamp} };
+    uint8_t _data1[sizeof(value)];
+    uint8_t _data2[sizeof(cloudTimestamp)];
+
+    tParam params[PARAM_NUMS_2] = { {0, (char *)_data1 }, {0, (char *)_data2} };
     WAIT_FOR_SLAVE_SELECT();
     // Send Command
     SpiDrv::sendCmd(IOT_READ_FLOAT, PARAM_NUMS_1);
@@ -373,12 +388,18 @@ uint8_t WiFiDrv::iotCloudReadPropertyFloat(const char* name, uint8_t name_len, f
 
     SpiDrv::spiSlaveDeselect();
 
+    memcpy(&value, &_data1, sizeof(value));
+    memcpy(&cloudTimestamp, &_data2, sizeof(cloudTimestamp));
+
     return retval;
 }
 
 uint8_t WiFiDrv::iotCloudReadPropertyString(const char* name, uint8_t name_len, String * value, unsigned long * cloudTimestamp)
 {
-    tParam params[PARAM_NUMS_2] = { {0, (char *)value }, {0, (char *)cloudTimestamp} };
+    uint8_t _data1[sizeof(value)];
+    uint8_t _data2[sizeof(cloudTimestamp)];
+
+    tParam params[PARAM_NUMS_2] = { {0, (char *)_data1 }, {0, (char *)_data2} };
     WAIT_FOR_SLAVE_SELECT();
     // Send Command
     SpiDrv::sendCmd(IOT_READ_STRING, PARAM_NUMS_1);
@@ -403,6 +424,9 @@ uint8_t WiFiDrv::iotCloudReadPropertyString(const char* name, uint8_t name_len, 
     }
 
     SpiDrv::spiSlaveDeselect();
+
+    memcpy(&value, &_data1, sizeof(value));
+    memcpy(&cloudTimestamp, &_data2, sizeof(cloudTimestamp));
 
     return retval;
 }
