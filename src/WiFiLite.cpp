@@ -153,7 +153,7 @@ int WiFiLiteClass::iotReadPropertyFloat(const char* name, float * value, unsigne
 	return 1;
 }
 
-int WiFiLiteClass::iotReadPropertyString(const char* name, String * value, unsigned long * cloudTimestamp)
+int WiFiLiteClass::iotReadPropertyString(const char* name, String&  value, unsigned long * cloudTimestamp)
 {
 	if (WiFiDrv::iotCloudReadPropertyString(name, strlen(name) + 1, value, cloudTimestamp)!= WL_FAILURE)
 	{

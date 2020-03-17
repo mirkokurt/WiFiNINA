@@ -53,7 +53,7 @@ public:
     int iotReadPropertyBool(const char* name, bool * value, unsigned long * cloudTimestamp);
     int iotReadPropertyInt(const char* name, int * value, unsigned long * cloudTimestamp);
     int iotReadPropertyFloat(const char* name, float * value, unsigned long * cloudTimestamp);
-    int iotReadPropertyString(const char* name, String * value, unsigned long * cloudTimestamp);
+    int iotReadPropertyString(const char* name, String& value, unsigned long * cloudTimestamp);
 
     int iotSetThingId(const char* thing_id);
     int iotSetBoardId(const char* board_id);
