@@ -314,7 +314,7 @@ uint8_t WiFiDrv::iotCloudReadPropertyBool(const char* name, uint8_t name_len, bo
 
     SpiDrv::spiSlaveDeselect();
 
-    memcpy(value, &_data1, sizeof(value));
+    memcpy(value, &_data1, sizeof(*value));
     memcpy(cloudTimestamp, &_data2, sizeof(*cloudTimestamp));
 
     return retval;
@@ -351,7 +351,7 @@ uint8_t WiFiDrv::iotCloudReadPropertyInt(const char* name, uint8_t name_len, int
 
     SpiDrv::spiSlaveDeselect();
 
-    memcpy(value, &_data1, sizeof(value));
+    memcpy(value, &_data1, sizeof(*value));
     memcpy(cloudTimestamp, &_data2, sizeof(*cloudTimestamp));
 
     return retval;
@@ -387,8 +387,7 @@ uint8_t WiFiDrv::iotCloudReadPropertyFloat(const char* name, uint8_t name_len, f
     }
 
     SpiDrv::spiSlaveDeselect();
-
-    memcpy(value, &_data1, sizeof(value));
+    memcpy(value, &_data1, sizeof(*value));
     memcpy(cloudTimestamp, &_data2, sizeof(*cloudTimestamp));
 
     return retval;
