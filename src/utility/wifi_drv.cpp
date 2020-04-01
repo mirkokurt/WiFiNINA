@@ -73,9 +73,9 @@ int8_t WiFiDrv::iotCloudBegin(const char* ssid, uint8_t ssid_len, const void *ke
 }
 
 
-uint8_t WiFiDrv::iotCloudUpdate(uint8_t * iotStatus, uint8_t * iotSyncStatus, uint8_t * connStatus)
+uint8_t WiFiDrv::iotCloudUpdate(uint8_t * iotStatus, uint8_t * iotSyncStatus, uint8_t * connStatus, uint8_t * err_code)
 {
-    tParam params[PARAM_NUMS_3] = { {0, (char *)iotStatus }, {0, (char*)iotSyncStatus} , {0, (char*)connStatus}};
+    tParam params[PARAM_NUMS_4] = { {0, (char *)iotStatus }, {0, (char*)iotSyncStatus} , {0, (char*)connStatus}, {0, (char*)err_code}};
     WAIT_FOR_SLAVE_SELECT();
 
     // Send Command
@@ -88,7 +88,7 @@ uint8_t WiFiDrv::iotCloudUpdate(uint8_t * iotStatus, uint8_t * iotSyncStatus, ui
 
     // Wait for reply
     uint8_t retval = 1;
-    if(!SpiDrv::waitResponseParams(IOT_UPDATE, PARAM_NUMS_3, params)){
+    if(!SpiDrv::waitResponseParams(IOT_UPDATE, PARAM_NUMS_4, params)){
         retval = 0;
     }
 

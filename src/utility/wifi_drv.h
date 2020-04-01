@@ -59,7 +59,7 @@ public:
      * Run the state machine of the iot cloud connection
      *
     */
-    static uint8_t iotCloudUpdate(uint8_t * iotStatus, uint8_t * iotSyncStatus, uint8_t * connStatus);
+    static uint8_t iotCloudUpdate(uint8_t * iotStatus, uint8_t * iotSyncStatus, uint8_t * connStatus, uint8_t * err_code);
 
     /* Add a property in ArduinoIoTCloud.
      *

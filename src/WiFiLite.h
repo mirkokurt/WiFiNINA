@@ -41,7 +41,7 @@ public:
     static const char* firmwareVersion();
 
     int iotBegin(const char* ssid, const char *passphrase, const char *mqtt_broker);
-    int iotUpdate(uint8_t * iotStatus, uint8_t * iotSyncStatus, uint8_t * connStatus);
+    int iotUpdate(uint8_t * iotStatus, uint8_t * iotSyncStatus, uint8_t * connStatus, uint8_t * err_code);
     int iotAddPropertyBool(const char* name, uint8_t permission_type, long seconds);
     int iotAddPropertyInt(const char* name, uint8_t permission_type, long seconds);
     int iotAddPropertyFloat(const char* name, uint8_t permission_type, long seconds);

@@ -43,9 +43,9 @@ int WiFiLiteClass::iotBegin(const char* ssid, const char *passphrase, const char
 	return 1;
 }
 
-int WiFiLiteClass::iotUpdate(uint8_t * iotStatus, uint8_t * iotSyncStatus, uint8_t * connStatus)
+int WiFiLiteClass::iotUpdate(uint8_t * iotStatus, uint8_t * iotSyncStatus, uint8_t * connStatus, uint8_t * err_code)
 {
-	if (!WiFiDrv::iotCloudUpdate(iotStatus, iotSyncStatus, connStatus))
+	if (!WiFiDrv::iotCloudUpdate(iotStatus, iotSyncStatus, connStatus, err_code))
 	{
 		return - 1;
 	}
