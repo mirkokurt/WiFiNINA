@@ -187,6 +187,34 @@ int WiFiLiteClass::iotSetSecretDeviceKey(const char* secret_key){
     return 1;
 }
 
+int WiFiLiteClass::iotBeginCSR(int keySlot, bool newPrivateKey){
+	if (WiFiDrv::iotCloudBeginCSR(keySlot, newPrivateKey)== WL_FAILURE)
+	{
+		return - 1;
+	}
+	return 1;
+}
+
+String WiFiLiteClass::iotEndCSR(String subjectCommonName){
+	return WiFiDrv::iotCloudEndCSR(subjectCommonName.c_str(), subjectCommonName.length() + 1);
+}
+
+int WiFiLiteClass::iotBeginStorage(int compressedCertSlot, int serialNumberAndAuthorityKeyIdentifierSlot){
+	if (WiFiDrv::iotCloudBeginStorage(compressedCertSlot, serialNumberAndAuthorityKeyIdentifierSlot)== WL_FAILURE)
+	{
+		return - 1;
+	}
+	return 1;
+}
+
+int WiFiLiteClass::iotEndStorage(byte signature[], byte authorityKeyIdentifier[], byte serialNumber[], int dates[]){
+	if (WiFiDrv::iotCloudEndStorage(signature, authorityKeyIdentifier, serialNumber, dates)== WL_FAILURE)
+	{
+		return - 1;
+	}
+	return 1;
+}
+
 unsigned long WiFiLiteClass::getTime()
 {
 	return WiFiDrv::getTime();

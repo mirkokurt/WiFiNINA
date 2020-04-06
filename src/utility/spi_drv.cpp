@@ -49,14 +49,6 @@ extern "C" {
 #include "utility/debug.h"
 }
 
-/* 
-#ifdef ARDUINO_AVR_UNO
-//TODO manage define of NINA in the Arduno avr UNO case
-    #define PINS_COUNT 36
-    #define NINA_GPIO0 30
-#endif
-*/
-
 static uint8_t SLAVESELECT = 10; // ss
 static uint8_t SLAVEREADY  = 7;  // handshake pin
 static uint8_t SLAVERESET  = 5;  // reset pin

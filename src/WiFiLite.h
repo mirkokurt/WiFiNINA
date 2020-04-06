@@ -59,6 +59,10 @@ public:
     int iotSetBoardId(const char* board_id);
     int iotSetSecretDeviceKey(const char* secret_key);
 
+    int iotBeginCSR(int keySlot, bool newPrivateKey);
+    String iotEndCSR(String subjectCommonName);
+    int iotBeginStorage(int compressedCertSlot, int serialNumberAndAuthorityKeyIdentifierSlot);
+    int iotEndStorage(byte signature[], byte authorityKeyIdentifier[], byte serialNumber[], int dates[]);
     unsigned long getTime();
 
     void lowPowerMode();

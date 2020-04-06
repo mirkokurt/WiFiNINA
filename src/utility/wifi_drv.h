@@ -24,6 +24,7 @@
 #include <inttypes.h>
 #include "utility/wifi_spi.h"
 #include "IPAddress.h"
+#include <Arduino.h>
 
 
 // Key index length
@@ -104,6 +105,11 @@ public:
     static uint8_t iotCloudSetBoardId(const char* board_id, uint8_t board_id_len);
     static uint8_t iotCloudSetSecretDeviceKey(const char* secret_key, uint8_t secret_key_len);
 
+    static uint8_t iotCloudBeginCSR(int keySlot, bool newPrivateKey);
+    static String iotCloudEndCSR(const char* subjectCommonName, uint8_t subjectCommonName_len);
+    static uint8_t iotCloudBeginStorage(int compressedCertSlot, int serialNumberAndAuthorityKeyIdentifierSlot);
+    static uint8_t iotCloudEndStorage(byte signature[], byte authorityKeyIdentifier[], byte serialNumber[], int dates[]);
+    
     /*
      * Get the firmware version
      * result: version as string with this format a.b.c
