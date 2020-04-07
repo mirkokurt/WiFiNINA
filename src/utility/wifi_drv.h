@@ -109,7 +109,9 @@ public:
     static String iotCloudEndCSR(const char* subjectCommonName, uint8_t subjectCommonName_len);
     static uint8_t iotCloudBeginStorage(int compressedCertSlot, int serialNumberAndAuthorityKeyIdentifierSlot);
     static uint8_t iotCloudEndStorage(byte signature[], byte authorityKeyIdentifier[], byte serialNumber[], int dates[]);
-    
+    static uint8_t iotCloudBeginReconstruction(int keySlot, int compressedCertSlot, int serialNumberAndAuthorityKeyIdentifierSlot);
+    static uint16_t iotCloudEndReconstruction(const char* countryName, uint8_t countryName_len, const char* organizationName, uint8_t organizationName_len, const char* organizationalUnitName, uint8_t organizationalUnitName_len, const char* commonName, uint8_t commonName_len);
+    static uint8_t iotCloudGetCert(byte * cert);
     /*
      * Get the firmware version
      * result: version as string with this format a.b.c
