@@ -531,8 +531,8 @@ uint8_t WiFiDrv::iotCloudBeginCSR(int keySlot, bool newPrivateKey){
     // Send Command
 
     SpiDrv::sendCmd(IOT_BEGIN_CSR, PARAM_NUMS_2);
-    SpiDrv::sendParam((uint8_t*)keySlot, sizeof(keySlot), NO_LAST_PARAM);
-    SpiDrv::sendParam((uint8_t*)newPrivateKey, sizeof(newPrivateKey), LAST_PARAM);
+    SpiDrv::sendParam((uint8_t*)&keySlot, sizeof(keySlot), NO_LAST_PARAM);
+    SpiDrv::sendParam((uint8_t*)&newPrivateKey, sizeof(newPrivateKey), LAST_PARAM);
 
     // pad to multiple of 4
     int commandSize = 6 + sizeof(keySlot) + sizeof(newPrivateKey);
@@ -592,8 +592,8 @@ uint8_t WiFiDrv::iotCloudBeginStorage(int compressedCertSlot, int serialNumberAn
     // Send Command
 
     SpiDrv::sendCmd(IOT_BEGIN_STORAGE, PARAM_NUMS_2);
-    SpiDrv::sendParam((uint8_t*)compressedCertSlot, sizeof(compressedCertSlot), NO_LAST_PARAM);
-    SpiDrv::sendParam((uint8_t*)serialNumberAndAuthorityKeyIdentifierSlot, sizeof(serialNumberAndAuthorityKeyIdentifierSlot), LAST_PARAM);
+    SpiDrv::sendParam((uint8_t*)&compressedCertSlot, sizeof(compressedCertSlot), NO_LAST_PARAM);
+    SpiDrv::sendParam((uint8_t*)&serialNumberAndAuthorityKeyIdentifierSlot, sizeof(serialNumberAndAuthorityKeyIdentifierSlot), LAST_PARAM);
 
     // pad to multiple of 4
     int commandSize = 6 + sizeof(compressedCertSlot) + sizeof(serialNumberAndAuthorityKeyIdentifierSlot);
@@ -627,11 +627,11 @@ uint8_t WiFiDrv::iotCloudEndStorage(byte signature[], byte authorityKeyIdentifie
     SpiDrv::sendParam((uint8_t*)signature, SIGNATURE_LENGTH, NO_LAST_PARAM);
     SpiDrv::sendParam((uint8_t*)authorityKeyIdentifier, AUTHORITY_KEY_IDENTIFIER_LENGTH, NO_LAST_PARAM);
     SpiDrv::sendParam((uint8_t*)serialNumber, SERIAL_NUMBER_LENGTH, NO_LAST_PARAM);
-    SpiDrv::sendParam((uint8_t*)dates[0], sizeof(dates[0]), NO_LAST_PARAM);
-    SpiDrv::sendParam((uint8_t*)dates[1], sizeof(dates[1]), NO_LAST_PARAM);
-    SpiDrv::sendParam((uint8_t*)dates[2], sizeof(dates[2]), NO_LAST_PARAM);
-    SpiDrv::sendParam((uint8_t*)dates[3], sizeof(dates[3]), NO_LAST_PARAM);
-    SpiDrv::sendParam((uint8_t*)dates[4], sizeof(dates[4]), LAST_PARAM);
+    SpiDrv::sendParam((uint8_t*)&dates[0], sizeof(int), NO_LAST_PARAM);
+    SpiDrv::sendParam((uint8_t*)&dates[1], sizeof(int), NO_LAST_PARAM);
+    SpiDrv::sendParam((uint8_t*)&dates[2], sizeof(int), NO_LAST_PARAM);
+    SpiDrv::sendParam((uint8_t*)&dates[3], sizeof(int), NO_LAST_PARAM);
+    SpiDrv::sendParam((uint8_t*)&dates[4], sizeof(int), LAST_PARAM);
 
 
     // pad to multiple of 4
@@ -663,9 +663,9 @@ uint8_t WiFiDrv::iotCloudBeginReconstruction(int keySlot, int compressedCertSlot
     // Send Command
 
     SpiDrv::sendCmd(IOT_BEGIN_RECONSTRUCTION, PARAM_NUMS_3);
-    SpiDrv::sendParam((uint8_t*)keySlot, sizeof(keySlot), NO_LAST_PARAM);
-    SpiDrv::sendParam((uint8_t*)compressedCertSlot, sizeof(compressedCertSlot), NO_LAST_PARAM);
-    SpiDrv::sendParam((uint8_t*)serialNumberAndAuthorityKeyIdentifierSlot, sizeof(serialNumberAndAuthorityKeyIdentifierSlot), LAST_PARAM);
+    SpiDrv::sendParam((uint8_t*)&keySlot, sizeof(keySlot), NO_LAST_PARAM);
+    SpiDrv::sendParam((uint8_t*)&compressedCertSlot, sizeof(compressedCertSlot), NO_LAST_PARAM);
+    SpiDrv::sendParam((uint8_t*)&serialNumberAndAuthorityKeyIdentifierSlot, sizeof(serialNumberAndAuthorityKeyIdentifierSlot), LAST_PARAM);
 
     // pad to multiple of 4
     int commandSize = 6 + sizeof(keySlot) + sizeof(compressedCertSlot) + sizeof(serialNumberAndAuthorityKeyIdentifierSlot);
@@ -715,13 +715,17 @@ uint16_t WiFiDrv::iotCloudEndReconstruction(const char* countryName, uint8_t cou
 
     // Wait for reply
     uint16_t _data = 0;
+    uint8_t _data1[2];
     uint8_t _dataLen = 0;
-    if (!SpiDrv::waitResponseCmd(IOT_END_RECONSTRUCTION, PARAM_NUMS_1, (uint8_t)&_data, &_dataLen))
+    if (!SpiDrv::waitResponseCmd(IOT_END_RECONSTRUCTION, PARAM_NUMS_1, (uint8_t *)_data1, &_dataLen))
     {
         WARN("error certificate reconstruction failed");
         _data = 0;
     }
     SpiDrv::spiSlaveDeselect();
+
+    memcpy(&_data, _data1, 2);
+
     return _data;
 }
 
@@ -744,15 +748,14 @@ uint8_t WiFiDrv::iotCloudGetCert(byte * cert){
     SpiDrv::spiSlaveSelect();
 
     // Wait for reply
-    uint8_t retval = WL_FAILURE;
-    unsigned char _data[510];
+    uint8_t retval = 1;
+
     uint16_t _dataLen = 0;
-    if(!SpiDrv::waitResponseData16(IOT_GET_CERT, _data, &_dataLen)){
+    if(!SpiDrv::waitResponseData16(IOT_GET_CERT, cert, &_dataLen)){
         retval = 0;
     }
     SpiDrv::spiSlaveDeselect();
 
-    memcpy(cert, &_data, _dataLen);
     return retval;
 }
 

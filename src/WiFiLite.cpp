@@ -226,14 +226,11 @@ int WiFiLiteClass::iotBeginReconstruction(int keySlot, int compressedCertSlot, i
 
 int WiFiLiteClass::iotEndReconstruction(String countryName, String organizationName, String organizationalUnitName, String commonName)
 {
-	if (WiFiDrv::iotCloudEndReconstruction(countryName.c_str(), countryName.length() + 1, organizationName.c_str(), organizationName.length() + 1, organizationalUnitName.c_str(), organizationalUnitName.length() + 1, commonName.c_str(), commonName.length() + 1)== WL_FAILURE)
-	{
-		return - 1;
-	}
-	return 1;
+	return WiFiDrv::iotCloudEndReconstruction(countryName.c_str(), countryName.length() + 1, organizationName.c_str(), organizationName.length() + 1, organizationalUnitName.c_str(), organizationalUnitName.length() + 1, commonName.c_str(), commonName.length() + 1);
+
 }
 
-int iotGetCert(byte * cert)
+int WiFiLiteClass::iotGetCert(byte * cert)
 {
 	if (WiFiDrv::iotCloudGetCert(cert) == WL_FAILURE)
 	{
