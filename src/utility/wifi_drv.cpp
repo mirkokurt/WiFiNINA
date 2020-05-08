@@ -189,7 +189,7 @@ int8_t WiFiDrv::wifiSetKey(const char* ssid, uint8_t ssid_len, uint8_t key_idx, 
     SpiDrv::sendParam((uint8_t*)ssid, ssid_len, NO_LAST_PARAM);
     SpiDrv::sendParam(&key_idx, KEY_IDX_LEN, NO_LAST_PARAM);
     SpiDrv::sendParam((uint8_t*)key, len, LAST_PARAM);
-    
+
     // pad to multiple of 4
     int commandSize = 8 + ssid_len + len;
     while (commandSize % 4) {
@@ -299,7 +299,416 @@ void WiFiDrv::setHostname(const char* hostname)
     }
     SpiDrv::spiSlaveDeselect();
 }
-                        
+/* IoTCloud method*/
+int8_t WiFiDrv::iotCloudBegin(const char* ssid, uint8_t ssid_len, const void *key, const uint8_t key_len)
+{
+	WAIT_FOR_SLAVE_SELECT();
+    // Send Command
+    SpiDrv::sendCmd(IOT_BEGIN, PARAM_NUMS_2);
+    SpiDrv::sendParam((uint8_t*)ssid, ssid_len, NO_LAST_PARAM);
+    SpiDrv::sendParam((uint8_t*)key, key_len, LAST_PARAM);
+
+
+    // pad to multiple of 4
+    int commandSize = 6 + ssid_len + key_len;
+    while (commandSize % 4) {
+        SpiDrv::readChar();
+        commandSize++;
+    }
+
+    SpiDrv::spiSlaveDeselect();
+    //Wait the reply elaboration
+    SpiDrv::waitForSlaveReady();
+    SpiDrv::spiSlaveSelect();
+
+    // Wait for reply
+    uint8_t _data = 0;
+    uint8_t _dataLen = 0;
+    if (!SpiDrv::waitResponseCmd(IOT_BEGIN, PARAM_NUMS_1, &_data, &_dataLen))
+    {
+        WARN("error waitResponse");
+        _data = WL_FAILURE;
+    }
+    SpiDrv::spiSlaveDeselect();
+    return _data;
+}
+
+ void MQTTsetKeepAliveInterval(const unsigned long interval, uint8_t length)
+ {
+    WAIT_FOR_SLAVE_SELECT();
+    // Send Command
+    SpiDrv::sendCmd(IOT_MQTT_SET_KEEP_ALIVE, PARAM_NUMS_1);
+    SpiDrv::sendParam((uint8_t*)&interval, length, LAST_PARAM);
+
+    // pad to multiple of 4
+    int commandSize = 5  + length;
+    while (commandSize % 4) {
+        SpiDrv::readChar();
+        commandSize++;
+    }
+
+    SpiDrv::spiSlaveDeselect();
+    //Wait the reply elaboration
+    SpiDrv::waitForSlaveReady();
+    SpiDrv::spiSlaveSelect();
+
+    // Wait for reply
+    uint8_t _data = 0;
+    uint8_t _dataLen = 0;
+    if (!SpiDrv::waitResponseCmd(IOT_MQTT_SET_KEEP_ALIVE, PARAM_NUMS_1, &_data, &_dataLen))
+    {
+        WARN("error waitResponse IOT_MQTT_SET_KEEP_ALIVE");
+        _data = WL_FAILURE;
+    }
+    SpiDrv::spiSlaveDeselect();
+    return;
+}
+
+void MQTTsetConnectionTimeout(const unsigned long timeout, uint8_t length)
+{
+    WAIT_FOR_SLAVE_SELECT();
+    // Send Command
+    SpiDrv::sendCmd(IOT_MQTT_SET_CON_TIMEOUT, PARAM_NUMS_1);
+    SpiDrv::sendParam((uint8_t*)&timeout, length, LAST_PARAM);
+
+    // pad to multiple of 4
+    int commandSize = 5 + length;
+    while (commandSize % 4) {
+        SpiDrv::readChar();
+        commandSize++;
+    }
+
+    SpiDrv::spiSlaveDeselect();
+    //Wait the reply elaboration
+    SpiDrv::waitForSlaveReady();
+    SpiDrv::spiSlaveSelect();
+
+    // Wait for reply
+    uint8_t _data = 0;
+    uint8_t _dataLen = 0;
+    if (!SpiDrv::waitResponseCmd(IOT_MQTT_SET_CON_TIMEOUT, PARAM_NUMS_1, &_data, &_dataLen))
+    {
+        WARN("error waitResponse IOT_MQTT_SET_CON_TIMEOUT");
+        _data = WL_FAILURE;
+    }
+    SpiDrv::spiSlaveDeselect();
+    return;
+}
+
+void MQTTsetID(const char* id, uint16_t length)
+{
+    WAIT_FOR_SLAVE_SELECT();
+    // Send Command
+    SpiDrv::sendCmd(IOT_MQTT_SET_ID, PARAM_NUMS_1);
+    SpiDrv::sendParam((uint8_t*)id, length, LAST_PARAM);
+
+    // pad to multiple of 4
+    int commandSize = 5 + length;
+    while (commandSize % 4) {
+        SpiDrv::readChar();
+        commandSize++;
+    }
+
+    SpiDrv::spiSlaveDeselect();
+    //Wait the reply elaboration
+    SpiDrv::waitForSlaveReady();
+    SpiDrv::spiSlaveSelect();
+
+    // Wait for reply
+    uint8_t _data = 0;
+    uint8_t _dataLen = 0;
+    if (!SpiDrv::waitResponseCmd(IOT_MQTT_SET_ID, PARAM_NUMS_1, &_data, &_dataLen))
+    {
+        WARN("error waitResponse IOT_MQTT_SET_ID");
+        _data = WL_FAILURE;
+    }
+    SpiDrv::spiSlaveDeselect();
+    return;
+}
+
+int8_t MQTTconnect(const char* host, uint16_t hostLegth, uint16_t port, uint8_t portLength)
+{
+    WAIT_FOR_SLAVE_SELECT();
+    // Send Command
+    SpiDrv::sendCmd(IOT_MQTT_CONNECT, PARAM_NUMS_2);
+    SpiDrv::sendParam((uint8_t*)host, hostLegth, NO_LAST_PARAM);
+    SpiDrv::sendParam((uint8_t*)&port, portLength, LAST_PARAM);
+
+
+    // pad to multiple of 4
+    int commandSize = 6 + hostLegth + portLength;
+    while (commandSize % 4) {
+        SpiDrv::readChar();
+        commandSize++;
+    }
+
+    SpiDrv::spiSlaveDeselect();
+    //Wait the reply elaboration
+    SpiDrv::waitForSlaveReady();
+    SpiDrv::spiSlaveSelect();
+
+    // Wait for reply
+    uint8_t _data = 0;
+    uint8_t _dataLen = 0;
+    if (!SpiDrv::waitResponseCmd(IOT_MQTT_CONNECT, PARAM_NUMS_1, &_data, &_dataLen))
+    {
+        WARN("error waitResponse");
+        _data = WL_FAILURE;
+    }
+    SpiDrv::spiSlaveDeselect();
+    return _data;
+}
+
+int8_t MQTTsubscribe(const char* topic, uint16_t topicLength , uint8_t qos, uint8_t qosLength)
+{
+    WAIT_FOR_SLAVE_SELECT();
+    // Send Command
+    SpiDrv::sendCmd(IOT_MQTT_SUBSCRIBE, PARAM_NUMS_2);
+    SpiDrv::sendParam((uint8_t*)topic, topicLength, NO_LAST_PARAM);
+    SpiDrv::sendParam((uint8_t*)&qos, qosLength, LAST_PARAM);
+
+
+    // pad to multiple of 4
+    int commandSize = 6 + topicLength + qosLength;
+    while (commandSize % 4) {
+        SpiDrv::readChar();
+        commandSize++;
+    }
+
+    SpiDrv::spiSlaveDeselect();
+    //Wait the reply elaboration
+    SpiDrv::waitForSlaveReady();
+    SpiDrv::spiSlaveSelect();
+
+    // Wait for reply
+    uint8_t _data = 0;
+    uint8_t _dataLen = 0;
+    if (!SpiDrv::waitResponseCmd(IOT_MQTT_SUBSCRIBE, PARAM_NUMS_1, &_data, &_dataLen))
+    {
+        WARN("error waitResponse");
+        _data = WL_FAILURE;
+    }
+    SpiDrv::spiSlaveDeselect();
+    return _data;
+}
+
+void MQTTstop()
+{
+    WAIT_FOR_SLAVE_SELECT();
+
+    // Send Command
+    SpiDrv::sendCmd(IOT_MQTT_STOP, PARAM_NUMS_0);
+
+    SpiDrv::spiSlaveDeselect();
+    //Wait the reply elaboration
+    SpiDrv::waitForSlaveReady();
+    SpiDrv::spiSlaveSelect();
+
+    // Wait for reply
+    uint8_t _data = 0;
+    uint8_t _dataLen = 0;
+    if (!SpiDrv::waitResponseCmd(IOT_MQTT_STOP, PARAM_NUMS_1, &_data, &_dataLen))
+    {
+        WARN("error waitResponse");
+        _data = WL_FAILURE;
+    }
+    SpiDrv::spiSlaveDeselect();
+    return _data;
+}
+
+uint8_t MQTTconnected()
+{
+    WAIT_FOR_SLAVE_SELECT();
+
+    // Send Command
+    SpiDrv::sendCmd(IOT_MQTT_CONNECTED, PARAM_NUMS_0);
+
+    SpiDrv::spiSlaveDeselect();
+    //Wait the reply elaboration
+    SpiDrv::waitForSlaveReady();
+    SpiDrv::spiSlaveSelect();
+
+    // Wait for reply
+    uint8_t _data = 0;
+    uint8_t _dataLen = 0;
+    if (!SpiDrv::waitResponseCmd(IOT_MQTT_CONNECTED, PARAM_NUMS_1, &_data, &_dataLen))
+    {
+        WARN("error waitResponse");
+        _data = WL_FAILURE;
+    }
+    SpiDrv::spiSlaveDeselect();
+    return _data;
+}
+
+int8_t MQTTbeginMessage(const char* topic, unt16_t topicLength(), unsigned long size, bool retain, uint8_t qos, bool dup)
+{
+    WAIT_FOR_SLAVE_SELECT();
+    // Send Command
+    SpiDrv::sendCmd(IOT_MQTT_BEGIN_MESSAGE, PARAM_NUMS_5);
+    SpiDrv::sendParam((uint8_t*)topic, topicLength, NO_LAST_PARAM);
+    SpiDrv::sendParam((uint8_t*)&size, sizeof(size), NO_LAST_PARAM);
+    SpiDrv::sendParam((uint8_t*)&retain, sizeof(retain), NO_LAST_PARAM);
+    SpiDrv::sendParam((uint8_t*)&qos, sizeof(qos), NO_LAST_PARAM);
+    SpiDrv::sendParam((uint8_t*)&dup, sizeof(dup), LAST_PARAM);
+
+    // pad to multiple of 4
+    int commandSize = 9 + topicLength + sizeof(size);
+    while (commandSize % 4) {
+        SpiDrv::readChar();
+        commandSize++;
+    }
+
+    SpiDrv::spiSlaveDeselect();
+    //Wait the reply elaboration
+    SpiDrv::waitForSlaveReady();
+    SpiDrv::spiSlaveSelect();
+
+    // Wait for reply
+    uint8_t _data = 0;
+    uint8_t _dataLen = 0;
+    if (!SpiDrv::waitResponseCmd(IOT_MQTT_BEGIN_MESSAGE, PARAM_NUMS_1, &_data, &_dataLen))
+    {
+        WARN("error waitResponse");
+        _data = WL_FAILURE;
+    }
+    SpiDrv::spiSlaveDeselect();
+    return _data;
+}
+
+int MQTTwrite(const char* buf, int size)
+{
+    WAIT_FOR_SLAVE_SELECT();
+    // Send Command
+    SpiDrv::sendCmd(IOT_MQTT_WRITE, PARAM_NUMS_2);
+    SpiDrv::sendParam((uint8_t*)buf, size, NO_LAST_PARAM);
+    SpiDrv::sendParam((uint8_t*)&size, sizeof(size), LAST_PARAM);
+
+
+    // pad to multiple of 4
+    int commandSize = 6 + size + sizeof(size);
+    while (commandSize % 4) {
+        SpiDrv::readChar();
+        commandSize++;
+    }
+
+    SpiDrv::spiSlaveDeselect();
+    //Wait the reply elaboration
+    SpiDrv::waitForSlaveReady();
+    SpiDrv::spiSlaveSelect();
+
+    // Wait for reply
+    uint8_t _data[sizeof(int)];
+    uint8_t _dataLen = 0;
+    if (!SpiDrv::waitResponseCmd(IOT_MQTT_WRITE, PARAM_NUMS_1, _data, &_dataLen))
+    {
+        WARN("error waitResponse");
+        _data = WL_FAILURE;
+    }
+    SpiDrv::spiSlaveDeselect();
+    int retdata = 0;
+    memcpy(&retdata, _data, sizeof(retdata));
+    return retdata;
+}
+
+int8_t MQTTendMessage()
+{
+    WAIT_FOR_SLAVE_SELECT();
+
+    // Send Command
+    SpiDrv::sendCmd(IOT_MQTT_END_MESSAGE, PARAM_NUMS_0);
+
+    SpiDrv::spiSlaveDeselect();
+    //Wait the reply elaboration
+    SpiDrv::waitForSlaveReady();
+    SpiDrv::spiSlaveSelect();
+
+    // Wait for reply
+    uint8_t _data = 0;
+    uint8_t _dataLen = 0;
+    if (!SpiDrv::waitResponseCmd(IOT_MQTT_END_MESSAGE, PARAM_NUMS_1, &_data, &_dataLen))
+    {
+        WARN("error waitResponse");
+        _data = WL_FAILURE;
+    }
+    SpiDrv::spiSlaveDeselect();
+    return _data;
+}
+
+void MQTTmessageTopic(String& topic){
+    WAIT_FOR_SLAVE_SELECT();
+
+    // Send Command
+    SpiDrv::sendCmd(IOT_MQTT_MESSAGE_TOPIC, PARAM_NUMS_0);
+
+    SpiDrv::spiSlaveDeselect();
+    //Wait the reply elaboration
+    SpiDrv::waitForSlaveReady();
+    SpiDrv::spiSlaveSelect();
+
+    // Wait for reply
+    uint8_t _data[256];
+    uint8_t _dataLen = 0;
+    if (!SpiDrv::waitResponseCmd(IOT_MQTT_MESSAGE_TOPIC, PARAM_NUMS_1, &_data, &_dataLen))
+    {
+        WARN("error waitResponse");
+        _data = WL_FAILURE;
+    }
+    SpiDrv::spiSlaveDeselect();
+
+    topic = (char *)_data;
+    return ;
+}
+
+byte MQTTread()
+{
+    WAIT_FOR_SLAVE_SELECT();
+
+    // Send Command
+    SpiDrv::sendCmd(IOT_MQTT_READ, PARAM_NUMS_0);
+
+    SpiDrv::spiSlaveDeselect();
+    //Wait the reply elaboration
+    SpiDrv::waitForSlaveReady();
+    SpiDrv::spiSlaveSelect();
+
+    // Wait for reply
+    uint8_t _data;
+    uint8_t _dataLen = 0;
+    if (!SpiDrv::waitResponseCmd(IOT_MQTT_READ, PARAM_NUMS_1, &_data, &_dataLen))
+    {
+        WARN("error waitResponse");
+        _data = WL_FAILURE;
+    }
+    SpiDrv::spiSlaveDeselect();
+
+    return _data;
+}
+
+void MQTTpoll()
+{
+    WAIT_FOR_SLAVE_SELECT();
+
+    // Send Command
+    SpiDrv::sendCmd(IOT_MQTT_POLL, PARAM_NUMS_0);
+
+    SpiDrv::spiSlaveDeselect();
+    //Wait the reply elaboration
+    SpiDrv::waitForSlaveReady();
+    SpiDrv::spiSlaveSelect();
+
+    // Wait for reply
+    uint8_t _data;
+    uint8_t _dataLen = 0;
+    if (!SpiDrv::waitResponseCmd(IOT_MQTT_POLL, PARAM_NUMS_1, &_data, &_dataLen))
+    {
+        WARN("error waitResponse");
+        _data = WL_FAILURE;
+    }
+    SpiDrv::spiSlaveDeselect();
+
+    return;
+}
+
 int8_t WiFiDrv::disconnect()
 {
 	WAIT_FOR_SLAVE_SELECT();
@@ -381,7 +790,7 @@ uint8_t* WiFiDrv::getMacAddress()
 
     uint8_t _dummy = DUMMY_DATA;
     SpiDrv::sendParam(&_dummy, 1, LAST_PARAM);
-    
+
     // pad to multiple of 4
     SpiDrv::readChar();
     SpiDrv::readChar();
@@ -649,7 +1058,7 @@ uint8_t* WiFiDrv::getBSSIDNetowrks(uint8_t networkItem, uint8_t* bssid)
 
     SpiDrv::spiSlaveDeselect();
 
-    return bssid;  
+    return bssid;
 }
 
 uint8_t WiFiDrv::getChannelNetowrks(uint8_t networkItem)
@@ -680,7 +1089,7 @@ uint8_t WiFiDrv::getChannelNetowrks(uint8_t networkItem)
 
     SpiDrv::spiSlaveDeselect();
 
-    return channel;  
+    return channel;
 }
 
 int32_t WiFiDrv::getRSSINetoworks(uint8_t networkItem)
@@ -982,7 +1391,7 @@ int16_t WiFiDrv::ping(uint32_t ipAddress, uint8_t ttl)
         _data = WL_PING_ERROR;
     }
     SpiDrv::spiSlaveDeselect();
-    return _data;  
+    return _data;
 }
 
 void WiFiDrv::debug(uint8_t on)
@@ -1008,7 +1417,7 @@ void WiFiDrv::debug(uint8_t on)
     uint8_t data = 0;
     SpiDrv::waitResponseCmd(SET_DEBUG_CMD, PARAM_NUMS_1, &data, &dataLen);
 
-    SpiDrv::spiSlaveDeselect(); 
+    SpiDrv::spiSlaveDeselect();
 }
 
 float WiFiDrv::getTemperature()

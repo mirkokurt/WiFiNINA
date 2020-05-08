@@ -86,6 +86,23 @@ public:
 	 */
     static int8_t wifiSetNetwork(const char* ssid, uint8_t ssid_len);
 
+    /*IoTCloud method*/
+
+    static int8_t iotCloudBegin(const char* ssid, uint8_t ssid_len, const void *key, const uint8_t len);
+    static void MQTTsetKeepAliveInterval(const unsigned long interval, uint8_t length);
+    static void MQTTsetConnectionTimeout(const unsigned long timeout, uint8_t length);
+    static void MQTTsetID(const char* id, uint16_t length);
+    static int8_t MQTTconnect(const char* host, uint16_t hostLegth, uint16_t port, uint8_t portLength);
+    static int8_t MQTTsubscribe(const char* topic, uint16_t topicLength , uint8_t qos, uint8_t qosLength);
+    static void MQTTstop();
+    static uint8_t MQTTconnected();
+    static int8_t MQTTbeginMessage(const char* topic, unt16_t topicLength(), unsigned long size, bool retain, uint8_t qos, bool dup);
+    static int MQTTwrite(const char* buf, int size);
+    static int8_t MQTTendMessage();
+    static void MQTTmessageTopic(String& topic);
+    static byte MQTTread();
+    void MQTTpoll();
+
     /* Start Wifi connection with passphrase
      * the most secure supported mode will be automatically selected
      *

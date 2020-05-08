@@ -84,6 +84,22 @@ public:
     uint8_t beginEnterprise(const char* ssid, const char* username, const char* password, const char* identity);
     uint8_t beginEnterprise(const char* ssid, const char* username, const char* password, const char* identity, const char* ca);
 
+    /*IoTCloud proxy method*/
+    int iotBegin(const char* ssid, const char *passphrase);
+    void MQTTsetKeepAliveInterval(unsigned long interval);
+    void MQTTsetConnectionTimeout(unsigned long timeout);
+    void MQTTsetID(const char * id);
+    int MQTTconnect(const char *host, uint16_t port = 1883);
+    int MQTTsubscribe(const String& topic, uint8_t qos = 0);
+    void MQTTstop();
+    uint8_t MQTTconnected();
+    int MQTTbeginMessage(const String& topic, unsigned long size, bool retain = false, uint8_t qos = 0, bool dup = false);
+    int MQTTwrite(const uint8_t *buf, size_t size);
+    int MQTTendMessage();
+    String MQTTmessageTopic();
+    byte MQTTread();
+    void MQTTpoll();
+
     /* Change Ip configuration settings disabling the dhcp client
         *
         * param local_ip: 	Static ip configuration

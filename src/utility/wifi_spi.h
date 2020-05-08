@@ -42,7 +42,7 @@
 #define CMD_POS			1		// Position of Command OpCode on SPI stream
 #define PARAM_LEN_POS 	2		// Position of Param len on SPI stream
 
-  
+
 enum {
 	SET_NET_CMD 		= 0x10,
 	SET_PASSPHRASE_CMD	= 0x11,
@@ -102,6 +102,22 @@ enum {
     SET_PIN_MODE		= 0x50,
     SET_DIGITAL_WRITE	= 0x51,
     SET_ANALOG_WRITE	= 0x52,
+
+		// ArduinoIoTCloud commands
+		IOT_BEGIN		= 0x60,
+		IOT_MQTT_SET_KEEP_ALIVE	= 0x61,
+		IOT_MQTT_SET_CON_TIMEOUT	= 0x62,
+		IOT_MQTT_SET_ID = 0x63,
+		IOT_MQTT_CONNECT = 0x64,
+		IOT_MQTT_SUBSCRIBE = 0x65,
+		IOT_MQTT_STOP = 0x66,
+		IOT_MQTT_CONNECTED = 0x67,
+		IOT_MQTT_BEGIN_MESSAGE = 0x68,
+		IOT_MQTT_WRITE = 0x69,
+		IOT_MQTT_END_MESSAGE = 0x6A,
+		IOT_MQTT_MESSAGE_TOPIC = 0x6B,
+		IOT_MQTT_READ = 0x6C,
+		IOT_MQTT_POLL = 0x6D,
 };
 
 

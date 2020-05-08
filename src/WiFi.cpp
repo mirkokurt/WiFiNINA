@@ -104,6 +104,84 @@ int WiFiClass::begin(const char* ssid, const char *passphrase)
     return status;
 }
 
+/*IoT Cloud method*/
+int WiFiClass::iotBegin(const char* ssid, const char *passphrase)
+{
+	if (WiFiDrv::iotCloudBegin(ssid, strlen(ssid) + 1, passphrase, strlen(passphrase) +1)== WL_FAILURE)
+	{
+		return - 1;
+	}
+	return 1;
+}
+
+void MQTTsetKeepAliveInterval(unsigned long interval)
+{
+	WiFiDrv::MQTTsetKeepAliveInterval(interval, sizeof(interval));
+}
+
+void MQTTsetConnectionTimeout(unsigned long timeout)
+{
+	WiFiDrv::MQTTsetConnectionTimeout(timeout, sizeof(timeout));
+}
+
+void MQTTsetID(const char * id)
+{
+	WiFiDrv::MQTTsetID(id, strlen(id));
+}
+
+int MQTTconnect(const char *host, uint16_t port)
+{
+	return WiFiDrv::MQTTconnect(host, strlen(host) +1, port, sizeof(port));
+}
+
+int MQTTsubscribe(const String& topic, uint8_t qos)
+{
+	return WiFiDrv::MQTTsubscribe(topic.c_str(), topic.length() +1 , qos, sizeof(qos));
+}
+
+void MQTTstop()
+{
+	return WiFiDrv::MQTTstop();
+}
+
+uint8_t MQTTconnected()
+{
+	return WiFiDrv::MQTTconnected();
+}
+
+int MQTTbeginMessage(const String& topic, unsigned long size, bool retain = false, uint8_t qos = 0, bool dup = false)
+{
+	return WiFiDrv::MQTTbeginMessage(topic.c_str(), topic.length() +1, size, retain, qos, dup);
+}
+
+int MQTTwrite(const uint8_t *buf, size_t size)
+{
+	return WiFiDrv::MQTTwrite(buf, size);
+}
+
+int MQTTendMessage()
+{
+	return WiFiDrv::MQTTendMessage();
+}
+
+String MQTTmessageTopic()
+{
+	String topic;
+	WiFiDrv::MQTTmessageTopic(topic);
+	return topic;
+}
+
+byte MQTTread()
+{
+	//TODO only for dev, implement a buffer
+	return WiFiDrv::MQTTread();
+}
+
+void MQTTpoll()
+{
+	return WiFiDrv::MQTTpoll();
+}
+
 uint8_t WiFiClass::beginAP(const char *ssid)
 {
 	return beginAP(ssid, 1);
@@ -241,7 +319,7 @@ uint8_t* WiFiClass::macAddress(uint8_t* mac)
 	memcpy(mac, _mac, WL_MAC_ADDR_LENGTH);
     return mac;
 }
-   
+
 IPAddress WiFiClass::localIP()
 {
 	IPAddress ret;
