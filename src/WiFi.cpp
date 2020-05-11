@@ -186,6 +186,59 @@ uint8_t WiFiClass::connectionCheck()
 {
 	return WiFiDrv::connectionCheck();
 }
+
+int WiFiClass::iotBeginCSR(int keySlot, bool newPrivateKey){
+	if (WiFiDrv::iotCloudBeginCSR(keySlot, newPrivateKey)== WL_FAILURE)
+	{
+		return - 1;
+	}
+	return 1;
+}
+
+String WiFiClass::iotEndCSR(String subjectCommonName){
+	return WiFiDrv::iotCloudEndCSR(subjectCommonName.c_str(), subjectCommonName.length() + 1);
+}
+
+int WiFiClass::iotBeginStorage(int compressedCertSlot, int serialNumberAndAuthorityKeyIdentifierSlot){
+	if (WiFiDrv::iotCloudBeginStorage(compressedCertSlot, serialNumberAndAuthorityKeyIdentifierSlot)== WL_FAILURE)
+	{
+		return - 1;
+	}
+	return 1;
+}
+
+int WiFiClass::iotEndStorage(byte signature[], byte authorityKeyIdentifier[], byte serialNumber[], int dates[]){
+	if (WiFiDrv::iotCloudEndStorage(signature, authorityKeyIdentifier, serialNumber, dates)== WL_FAILURE)
+	{
+		return - 1;
+	}
+	return 1;
+}
+
+int WiFiClass::iotBeginReconstruction(int keySlot, int compressedCertSlot, int serialNumberAndAuthorityKeyIdentifierSlot)
+{
+	if (WiFiDrv::iotCloudBeginReconstruction(keySlot, compressedCertSlot, serialNumberAndAuthorityKeyIdentifierSlot)== 0)
+	{
+		return - 1;
+	}
+	return 1;
+}
+
+int WiFiClass::iotEndReconstruction(String countryName, String organizationName, String organizationalUnitName, String commonName)
+{
+	return WiFiDrv::iotCloudEndReconstruction(countryName.c_str(), countryName.length() + 1, organizationName.c_str(), organizationName.length() + 1, organizationalUnitName.c_str(), organizationalUnitName.length() + 1, commonName.c_str(), commonName.length() + 1);
+
+}
+
+int WiFiClass::iotGetCert(byte * cert)
+{
+	if (WiFiDrv::iotCloudGetCert(cert) == WL_FAILURE)
+	{
+		return - 1;
+	}
+	return 1;
+}
+
 uint8_t WiFiClass::beginAP(const char *ssid)
 {
 	return beginAP(ssid, 1);

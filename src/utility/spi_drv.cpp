@@ -44,6 +44,11 @@
 #define digitalWrite(pin, value) FPGA.digitalWrite(pin, value)
 #endif
 
+#ifdef ARDUINO_AVR_UNO
+#define NINA_GPIO0 4
+#define PINS_COUNT 30
+#endif
+
 //#define _DEBUG_
 extern "C" {
 #include "utility/debug.h"

@@ -96,13 +96,21 @@ public:
     static int8_t MQTTsubscribe(const char* topic, uint16_t topicLength , uint8_t qos, uint8_t qosLength);
     static void MQTTstop();
     static uint8_t MQTTconnected();
-    static int8_t MQTTbeginMessage(const char* topic, unt16_t topicLength(), unsigned long size, bool retain, uint8_t qos, bool dup);
+    static int8_t MQTTbeginMessage(const char* topic, uint16_t topicLength(), unsigned long size, bool retain, uint8_t qos, bool dup);
     static int MQTTwrite(const char* buf, int size);
     static int8_t MQTTendMessage();
     static void MQTTmessageTopic(String& topic);
     static byte MQTTread();
-    void MQTTpoll();
-    WiFiDrv::connectionCheck();
+    static void MQTTpoll();
+    static uint8_t connectionCheck();
+
+    static uint8_t iotCloudBeginCSR(int keySlot, bool newPrivateKey);
+    static String iotCloudEndCSR(const char* subjectCommonName, uint8_t subjectCommonName_len);
+    static uint8_t iotCloudBeginStorage(int compressedCertSlot, int serialNumberAndAuthorityKeyIdentifierSlot);
+    static uint8_t iotCloudEndStorage(byte signature[], byte authorityKeyIdentifier[], byte serialNumber[], int dates[]);
+    static uint8_t iotCloudBeginReconstruction(int keySlot, int compressedCertSlot, int serialNumberAndAuthorityKeyIdentifierSlot);
+    static uint16_t iotCloudEndReconstruction(const char* countryName, uint8_t countryName_len, const char* organizationName, uint8_t organizationName_len, const char* organizationalUnitName, uint8_t organizationalUnitName_len, const char* commonName, uint8_t commonName_len);
+    static uint8_t iotCloudGetCert(byte * cert);
 
     /* Start Wifi connection with passphrase
      * the most secure supported mode will be automatically selected

@@ -101,6 +101,15 @@ public:
     void MQTTpoll();
     uint8_t connectionCheck();
 
+    /*Provisiong methods*/
+    int iotBeginCSR(int keySlot, bool newPrivateKey);
+    String iotEndCSR(String subjectCommonName);
+    int iotBeginStorage(int compressedCertSlot, int serialNumberAndAuthorityKeyIdentifierSlot);
+    int iotEndStorage(byte signature[], byte authorityKeyIdentifier[], byte serialNumber[], int dates[]);
+    int iotBeginReconstruction(int keySlot, int compressedCertSlot, int serialNumberAndAuthorityKeyIdentifierSlot);
+    int iotEndReconstruction(String countryName, String organizationName, String organizationalUnitName, String commonName);
+    int iotGetCert(byte * cert);
+
     /* Change Ip configuration settings disabling the dhcp client
         *
         * param local_ip: 	Static ip configuration

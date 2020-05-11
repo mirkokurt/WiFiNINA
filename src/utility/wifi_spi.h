@@ -42,6 +42,9 @@
 #define CMD_POS			1		// Position of Command OpCode on SPI stream
 #define PARAM_LEN_POS 	2		// Position of Param len on SPI stream
 
+#define SIGNATURE_LENGTH                64
+#define SERIAL_NUMBER_LENGTH            16
+#define AUTHORITY_KEY_IDENTIFIER_LENGTH 20
 
 enum {
 	SET_NET_CMD 		= 0x10,
@@ -118,7 +121,16 @@ enum {
 		IOT_MQTT_MESSAGE_TOPIC = 0x6B,
 		IOT_MQTT_READ = 0x6C,
 		IOT_MQTT_POLL = 0x6D,
-		IOT_CONNECTION_CHECK = 0x6E
+		IOT_CONNECTION_CHECK = 0x6E,
+
+		// Provisioning commands
+		IOT_BEGIN_CSR = 0x70,
+		IOT_END_CSR = 0x71,
+		IOT_BEGIN_STORAGE = 0x72,
+		IOT_END_STORAGE = 0x73,
+		IOT_BEGIN_RECONSTRUCTION = 0x74,
+		IOT_END_RECONSTRUCTION = 0x75,
+		IOT_GET_CERT = 0x76
 };
 
 
@@ -145,6 +157,8 @@ enum numParams{
     PARAM_NUMS_4,
     PARAM_NUMS_5,
     PARAM_NUMS_6,
+		PARAM_NUMS_7,
+		PARAM_NUMS_8,
     MAX_PARAM_NUMS
 };
 

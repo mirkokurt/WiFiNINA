@@ -540,7 +540,7 @@ uint8_t WiFiDrv::MQTTconnected()
     return _data;
 }
 
-int8_t WiFiDrv::MQTTbeginMessage(const char* topic, unt16_t topicLength(), unsigned long size, bool retain, uint8_t qos, bool dup)
+int8_t WiFiDrv::MQTTbeginMessage(const char* topic, uint16_t topicLength(), unsigned long size, bool retain, uint8_t qos, bool dup)
 {
     WAIT_FOR_SLAVE_SELECT();
     // Send Command
@@ -599,11 +599,7 @@ int WiFiDrv::MQTTwrite(const char* buf, int size)
     // Wait for reply
     uint8_t _data[sizeof(int)];
     uint8_t _dataLen = 0;
-    if (!SpiDrv::waitResponseCmd(IOT_MQTT_WRITE, PARAM_NUMS_1, _data, &_dataLen))
-    {
-        WARN("error waitResponse");
-        _data = WL_FAILURE;
-    }
+    SpiDrv::waitResponseCmd(IOT_MQTT_WRITE, PARAM_NUMS_1, _data, &_dataLen);
     SpiDrv::spiSlaveDeselect();
     int retdata = 0;
     memcpy(&retdata, _data, sizeof(retdata));
@@ -648,11 +644,7 @@ void WiFiDrv::MQTTmessageTopic(String& topic){
     // Wait for reply
     uint8_t _data[256];
     uint8_t _dataLen = 0;
-    if (!SpiDrv::waitResponseCmd(IOT_MQTT_MESSAGE_TOPIC, PARAM_NUMS_1, &_data, &_dataLen))
-    {
-        WARN("error waitResponse");
-        _data = WL_FAILURE;
-    }
+    SpiDrv::waitResponseCmd(IOT_MQTT_MESSAGE_TOPIC, PARAM_NUMS_1, _data, &_dataLen);
     SpiDrv::spiSlaveDeselect();
 
     topic = (char *)_data;
@@ -731,6 +723,239 @@ uint8_t WiFiDrv::connectionCheck()
     }
     SpiDrv::spiSlaveDeselect();
     return _data;
+}
+
+uint8_t WiFiDrv::iotCloudBeginCSR(int keySlot, bool newPrivateKey){
+   WAIT_FOR_SLAVE_SELECT();
+    // Send Command
+
+    SpiDrv::sendCmd(IOT_BEGIN_CSR, PARAM_NUMS_2);
+    SpiDrv::sendParam((uint8_t*)&keySlot, sizeof(keySlot), NO_LAST_PARAM);
+    SpiDrv::sendParam((uint8_t*)&newPrivateKey, sizeof(newPrivateKey), LAST_PARAM);
+
+    // pad to multiple of 4
+    int commandSize = 6 + sizeof(keySlot) + sizeof(newPrivateKey);
+    while (commandSize % 4) {
+        SpiDrv::readChar();
+        commandSize++;
+    }
+
+    SpiDrv::spiSlaveDeselect();
+    //Wait the reply elaboration
+    SpiDrv::waitForSlaveReady();
+    SpiDrv::spiSlaveSelect();
+
+    // Wait for reply
+    uint8_t _data = 0;
+    uint8_t _dataLen = 0;
+    if (!SpiDrv::waitResponseCmd(IOT_BEGIN_CSR, PARAM_NUMS_1, &_data, &_dataLen))
+    {
+        WARN("error waitResponse");
+        _data = WL_FAILURE;
+    }
+    SpiDrv::spiSlaveDeselect();
+    return _data;
+}
+
+String WiFiDrv::iotCloudEndCSR(const char* subjectCommonName, uint8_t subjectCommonName_len)
+{
+    WAIT_FOR_SLAVE_SELECT();
+    // Send Command
+    SpiDrv::sendCmd(IOT_END_CSR, PARAM_NUMS_1);
+    SpiDrv::sendParam((uint8_t*)subjectCommonName, subjectCommonName_len, LAST_PARAM);
+
+    // pad to multiple of 4
+    int commandSize = 5 + subjectCommonName_len;
+    while (commandSize % 4) {
+        SpiDrv::readChar();
+        commandSize++;
+    }
+
+    SpiDrv::spiSlaveDeselect();
+    //Wait the reply elaboration
+    SpiDrv::waitForSlaveReady();
+    SpiDrv::spiSlaveSelect();
+
+    // Wait for reply
+    String s;
+    unsigned char _data[510];
+    uint16_t _dataLen = 0;
+    SpiDrv::waitResponseData16(IOT_END_CSR, _data, &_dataLen);
+    SpiDrv::spiSlaveDeselect();
+
+    return String((char *)_data);
+}
+
+uint8_t WiFiDrv::iotCloudBeginStorage(int compressedCertSlot, int serialNumberAndAuthorityKeyIdentifierSlot){
+   WAIT_FOR_SLAVE_SELECT();
+    // Send Command
+
+    SpiDrv::sendCmd(IOT_BEGIN_STORAGE, PARAM_NUMS_2);
+    SpiDrv::sendParam((uint8_t*)&compressedCertSlot, sizeof(compressedCertSlot), NO_LAST_PARAM);
+    SpiDrv::sendParam((uint8_t*)&serialNumberAndAuthorityKeyIdentifierSlot, sizeof(serialNumberAndAuthorityKeyIdentifierSlot), LAST_PARAM);
+
+    // pad to multiple of 4
+    int commandSize = 6 + sizeof(compressedCertSlot) + sizeof(serialNumberAndAuthorityKeyIdentifierSlot);
+    while (commandSize % 4) {
+        SpiDrv::readChar();
+        commandSize++;
+    }
+
+    SpiDrv::spiSlaveDeselect();
+    //Wait the reply elaboration
+    SpiDrv::waitForSlaveReady();
+    SpiDrv::spiSlaveSelect();
+
+    // Wait for reply
+    uint8_t _data = 0;
+    uint8_t _dataLen = 0;
+    if (!SpiDrv::waitResponseCmd(IOT_BEGIN_STORAGE, PARAM_NUMS_1, &_data, &_dataLen))
+    {
+        WARN("error waitResponse");
+        _data = WL_FAILURE;
+    }
+    SpiDrv::spiSlaveDeselect();
+    return _data;
+}
+
+uint8_t WiFiDrv::iotCloudEndStorage(byte signature[], byte authorityKeyIdentifier[], byte serialNumber[], int dates[])
+{
+    WAIT_FOR_SLAVE_SELECT();
+    // Send Command
+    SpiDrv::sendCmd(IOT_END_STORAGE, PARAM_NUMS_8);
+    SpiDrv::sendParam((uint8_t*)signature, SIGNATURE_LENGTH, NO_LAST_PARAM);
+    SpiDrv::sendParam((uint8_t*)authorityKeyIdentifier, AUTHORITY_KEY_IDENTIFIER_LENGTH, NO_LAST_PARAM);
+    SpiDrv::sendParam((uint8_t*)serialNumber, SERIAL_NUMBER_LENGTH, NO_LAST_PARAM);
+    SpiDrv::sendParam((uint8_t*)&dates[0], sizeof(int), NO_LAST_PARAM);
+    SpiDrv::sendParam((uint8_t*)&dates[1], sizeof(int), NO_LAST_PARAM);
+    SpiDrv::sendParam((uint8_t*)&dates[2], sizeof(int), NO_LAST_PARAM);
+    SpiDrv::sendParam((uint8_t*)&dates[3], sizeof(int), NO_LAST_PARAM);
+    SpiDrv::sendParam((uint8_t*)&dates[4], sizeof(int), LAST_PARAM);
+
+
+    // pad to multiple of 4
+    int commandSize = 12 + SIGNATURE_LENGTH + AUTHORITY_KEY_IDENTIFIER_LENGTH + SERIAL_NUMBER_LENGTH + sizeof(dates[0])*5;
+    while (commandSize % 4) {
+        SpiDrv::readChar();
+        commandSize++;
+    }
+
+    SpiDrv::spiSlaveDeselect();
+    //Wait the reply elaboration
+    SpiDrv::waitForSlaveReady();
+    SpiDrv::spiSlaveSelect();
+
+    // Wait for reply
+    uint8_t _data = 0;
+    uint8_t _dataLen = 0;
+    if (!SpiDrv::waitResponseCmd(IOT_BEGIN_STORAGE, PARAM_NUMS_1, &_data, &_dataLen))
+    {
+        WARN("error waitResponse");
+        _data = WL_FAILURE;
+    }
+    SpiDrv::spiSlaveDeselect();
+    return _data;
+}
+
+uint8_t WiFiDrv::iotCloudBeginReconstruction(int keySlot, int compressedCertSlot, int serialNumberAndAuthorityKeyIdentifierSlot){
+   WAIT_FOR_SLAVE_SELECT();
+    // Send Command
+
+    SpiDrv::sendCmd(IOT_BEGIN_RECONSTRUCTION, PARAM_NUMS_3);
+    SpiDrv::sendParam((uint8_t*)&keySlot, sizeof(keySlot), NO_LAST_PARAM);
+    SpiDrv::sendParam((uint8_t*)&compressedCertSlot, sizeof(compressedCertSlot), NO_LAST_PARAM);
+    SpiDrv::sendParam((uint8_t*)&serialNumberAndAuthorityKeyIdentifierSlot, sizeof(serialNumberAndAuthorityKeyIdentifierSlot), LAST_PARAM);
+
+    // pad to multiple of 4
+    int commandSize = 6 + sizeof(keySlot) + sizeof(compressedCertSlot) + sizeof(serialNumberAndAuthorityKeyIdentifierSlot);
+    while (commandSize % 4) {
+        SpiDrv::readChar();
+        commandSize++;
+    }
+
+    SpiDrv::spiSlaveDeselect();
+    //Wait the reply elaboration
+    SpiDrv::waitForSlaveReady();
+    SpiDrv::spiSlaveSelect();
+
+    // Wait for reply
+    uint8_t _data = 0;
+    uint8_t _dataLen = 0;
+    if (!SpiDrv::waitResponseCmd(IOT_BEGIN_RECONSTRUCTION, PARAM_NUMS_1, &_data, &_dataLen))
+    {
+        WARN("error waitResponse");
+        _data = WL_FAILURE;
+    }
+    SpiDrv::spiSlaveDeselect();
+    return _data;
+}
+
+uint16_t WiFiDrv::iotCloudEndReconstruction(const char* countryName, uint8_t countryName_len, const char* organizationName, uint8_t organizationName_len, const char* organizationalUnitName, uint8_t organizationalUnitName_len, const char* commonName, uint8_t commonName_len)
+{
+    WAIT_FOR_SLAVE_SELECT();
+    // Send Command
+    SpiDrv::sendCmd(IOT_END_RECONSTRUCTION, PARAM_NUMS_1);
+    SpiDrv::sendParam((uint8_t*)countryName, countryName_len, NO_LAST_PARAM);
+    SpiDrv::sendParam((uint8_t*)organizationName, organizationName_len, NO_LAST_PARAM);
+    SpiDrv::sendParam((uint8_t*)organizationalUnitName, organizationalUnitName_len, NO_LAST_PARAM);
+    SpiDrv::sendParam((uint8_t*)commonName, commonName_len, LAST_PARAM);
+
+    // pad to multiple of 4
+    int commandSize = 5 + countryName_len + organizationName_len + organizationalUnitName_len + commonName_len;
+    while (commandSize % 4) {
+        SpiDrv::readChar();
+        commandSize++;
+    }
+
+    SpiDrv::spiSlaveDeselect();
+    //Wait the reply elaboration
+    SpiDrv::waitForSlaveReady();
+    SpiDrv::spiSlaveSelect();
+
+    // Wait for reply
+    uint16_t _data = 0;
+    uint8_t _data1[2];
+    uint8_t _dataLen = 0;
+    if (!SpiDrv::waitResponseCmd(IOT_END_RECONSTRUCTION, PARAM_NUMS_1, (uint8_t *)_data1, &_dataLen))
+    {
+        WARN("error certificate reconstruction failed");
+        _data = 0;
+    }
+    SpiDrv::spiSlaveDeselect();
+
+    memcpy(&_data, _data1, 2);
+
+    return _data;
+}
+
+uint8_t WiFiDrv::iotCloudGetCert(byte * cert){
+
+    WAIT_FOR_SLAVE_SELECT();
+    // Send Command
+    SpiDrv::sendCmd(IOT_GET_CERT, PARAM_NUMS_0);
+
+    // pad to multiple of 4
+    int commandSize = 4;
+    while (commandSize % 4) {
+        SpiDrv::readChar();
+        commandSize++;
+    }
+
+    SpiDrv::spiSlaveDeselect();
+    //Wait the reply elaboration
+    SpiDrv::waitForSlaveReady();
+    SpiDrv::spiSlaveSelect();
+
+    // Wait for reply
+    uint8_t retval = 1;
+
+    uint16_t _dataLen = 0;
+    if(!SpiDrv::waitResponseData16(IOT_GET_CERT, cert, &_dataLen)){
+        retval = 0;
+    }
+    SpiDrv::spiSlaveDeselect();
+
+    return retval;
 }
 
 int8_t WiFiDrv::disconnect()
