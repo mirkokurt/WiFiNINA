@@ -99,6 +99,7 @@ public:
     String MQTTmessageTopic();
     byte MQTTread();
     void MQTTpoll();
+    uint8_t connectionCheck();
 
     /* Change Ip configuration settings disabling the dhcp client
         *

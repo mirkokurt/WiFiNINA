@@ -114,74 +114,78 @@ int WiFiClass::iotBegin(const char* ssid, const char *passphrase)
 	return 1;
 }
 
-void MQTTsetKeepAliveInterval(unsigned long interval)
+void WiFiClass::MQTTsetKeepAliveInterval(unsigned long interval)
 {
 	WiFiDrv::MQTTsetKeepAliveInterval(interval, sizeof(interval));
 }
 
-void MQTTsetConnectionTimeout(unsigned long timeout)
+void WiFiClass::MQTTsetConnectionTimeout(unsigned long timeout)
 {
 	WiFiDrv::MQTTsetConnectionTimeout(timeout, sizeof(timeout));
 }
 
-void MQTTsetID(const char * id)
+void WiFiClass::MQTTsetID(const char * id)
 {
 	WiFiDrv::MQTTsetID(id, strlen(id));
 }
 
-int MQTTconnect(const char *host, uint16_t port)
+int WiFiClass::MQTTconnect(const char *host, uint16_t port)
 {
 	return WiFiDrv::MQTTconnect(host, strlen(host) +1, port, sizeof(port));
 }
 
-int MQTTsubscribe(const String& topic, uint8_t qos)
+int WiFiClass::MQTTsubscribe(const String& topic, uint8_t qos)
 {
 	return WiFiDrv::MQTTsubscribe(topic.c_str(), topic.length() +1 , qos, sizeof(qos));
 }
 
-void MQTTstop()
+void WiFiClass::MQTTstop()
 {
 	return WiFiDrv::MQTTstop();
 }
 
-uint8_t MQTTconnected()
+uint8_t WiFiClass::MQTTconnected()
 {
 	return WiFiDrv::MQTTconnected();
 }
 
-int MQTTbeginMessage(const String& topic, unsigned long size, bool retain = false, uint8_t qos = 0, bool dup = false)
+int WiFiClass::MQTTbeginMessage(const String& topic, unsigned long size, bool retain = false, uint8_t qos = 0, bool dup = false)
 {
 	return WiFiDrv::MQTTbeginMessage(topic.c_str(), topic.length() +1, size, retain, qos, dup);
 }
 
-int MQTTwrite(const uint8_t *buf, size_t size)
+int WiFiClass::MQTTwrite(const uint8_t *buf, size_t size)
 {
 	return WiFiDrv::MQTTwrite(buf, size);
 }
 
-int MQTTendMessage()
+int WiFiClass::MQTTendMessage()
 {
 	return WiFiDrv::MQTTendMessage();
 }
 
-String MQTTmessageTopic()
+String WiFiClass::MQTTmessageTopic()
 {
 	String topic;
 	WiFiDrv::MQTTmessageTopic(topic);
 	return topic;
 }
 
-byte MQTTread()
+byte WiFiClass::MQTTread()
 {
 	//TODO only for dev, implement a buffer
 	return WiFiDrv::MQTTread();
 }
 
-void MQTTpoll()
+void WiFiClass::MQTTpoll()
 {
 	return WiFiDrv::MQTTpoll();
 }
 
+uint8_t WiFiClass::connectionCheck()
+{
+	return WiFiDrv::connectionCheck();
+}
 uint8_t WiFiClass::beginAP(const char *ssid)
 {
 	return beginAP(ssid, 1);

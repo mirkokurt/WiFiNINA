@@ -333,7 +333,7 @@ int8_t WiFiDrv::iotCloudBegin(const char* ssid, uint8_t ssid_len, const void *ke
     return _data;
 }
 
- void MQTTsetKeepAliveInterval(const unsigned long interval, uint8_t length)
+ void WiFiDrv::MQTTsetKeepAliveInterval(const unsigned long interval, uint8_t length)
  {
     WAIT_FOR_SLAVE_SELECT();
     // Send Command
@@ -364,7 +364,7 @@ int8_t WiFiDrv::iotCloudBegin(const char* ssid, uint8_t ssid_len, const void *ke
     return;
 }
 
-void MQTTsetConnectionTimeout(const unsigned long timeout, uint8_t length)
+void WiFiDrv::MQTTsetConnectionTimeout(const unsigned long timeout, uint8_t length)
 {
     WAIT_FOR_SLAVE_SELECT();
     // Send Command
@@ -395,7 +395,7 @@ void MQTTsetConnectionTimeout(const unsigned long timeout, uint8_t length)
     return;
 }
 
-void MQTTsetID(const char* id, uint16_t length)
+void WiFiDrv::MQTTsetID(const char* id, uint16_t length)
 {
     WAIT_FOR_SLAVE_SELECT();
     // Send Command
@@ -426,7 +426,7 @@ void MQTTsetID(const char* id, uint16_t length)
     return;
 }
 
-int8_t MQTTconnect(const char* host, uint16_t hostLegth, uint16_t port, uint8_t portLength)
+int8_t WiFiDrv::MQTTconnect(const char* host, uint16_t hostLegth, uint16_t port, uint8_t portLength)
 {
     WAIT_FOR_SLAVE_SELECT();
     // Send Command
@@ -459,7 +459,7 @@ int8_t MQTTconnect(const char* host, uint16_t hostLegth, uint16_t port, uint8_t 
     return _data;
 }
 
-int8_t MQTTsubscribe(const char* topic, uint16_t topicLength , uint8_t qos, uint8_t qosLength)
+int8_t WiFiDrv::MQTTsubscribe(const char* topic, uint16_t topicLength , uint8_t qos, uint8_t qosLength)
 {
     WAIT_FOR_SLAVE_SELECT();
     // Send Command
@@ -492,7 +492,7 @@ int8_t MQTTsubscribe(const char* topic, uint16_t topicLength , uint8_t qos, uint
     return _data;
 }
 
-void MQTTstop()
+void WiFiDrv::MQTTstop()
 {
     WAIT_FOR_SLAVE_SELECT();
 
@@ -516,7 +516,7 @@ void MQTTstop()
     return _data;
 }
 
-uint8_t MQTTconnected()
+uint8_t WiFiDrv::MQTTconnected()
 {
     WAIT_FOR_SLAVE_SELECT();
 
@@ -540,7 +540,7 @@ uint8_t MQTTconnected()
     return _data;
 }
 
-int8_t MQTTbeginMessage(const char* topic, unt16_t topicLength(), unsigned long size, bool retain, uint8_t qos, bool dup)
+int8_t WiFiDrv::MQTTbeginMessage(const char* topic, unt16_t topicLength(), unsigned long size, bool retain, uint8_t qos, bool dup)
 {
     WAIT_FOR_SLAVE_SELECT();
     // Send Command
@@ -575,7 +575,7 @@ int8_t MQTTbeginMessage(const char* topic, unt16_t topicLength(), unsigned long 
     return _data;
 }
 
-int MQTTwrite(const char* buf, int size)
+int WiFiDrv::MQTTwrite(const char* buf, int size)
 {
     WAIT_FOR_SLAVE_SELECT();
     // Send Command
@@ -610,7 +610,7 @@ int MQTTwrite(const char* buf, int size)
     return retdata;
 }
 
-int8_t MQTTendMessage()
+int8_t WiFiDrv::MQTTendMessage()
 {
     WAIT_FOR_SLAVE_SELECT();
 
@@ -634,7 +634,7 @@ int8_t MQTTendMessage()
     return _data;
 }
 
-void MQTTmessageTopic(String& topic){
+void WiFiDrv::MQTTmessageTopic(String& topic){
     WAIT_FOR_SLAVE_SELECT();
 
     // Send Command
@@ -659,7 +659,7 @@ void MQTTmessageTopic(String& topic){
     return ;
 }
 
-byte MQTTread()
+byte WiFiDrv::MQTTread()
 {
     WAIT_FOR_SLAVE_SELECT();
 
@@ -684,7 +684,7 @@ byte MQTTread()
     return _data;
 }
 
-void MQTTpoll()
+void WiFiDrv::MQTTpoll()
 {
     WAIT_FOR_SLAVE_SELECT();
 
@@ -707,6 +707,30 @@ void MQTTpoll()
     SpiDrv::spiSlaveDeselect();
 
     return;
+}
+
+uint8_t WiFiDrv::connectionCheck()
+{
+    WAIT_FOR_SLAVE_SELECT();
+
+    // Send Command
+    SpiDrv::sendCmd(IOT_CONNECTION_CHECK, PARAM_NUMS_0);
+
+    SpiDrv::spiSlaveDeselect();
+    //Wait the reply elaboration
+    SpiDrv::waitForSlaveReady();
+    SpiDrv::spiSlaveSelect();
+
+    // Wait for reply
+    uint8_t _data = 0;
+    uint8_t _dataLen = 0;
+    if (!SpiDrv::waitResponseCmd(IOT_CONNECTION_CHECK, PARAM_NUMS_1, &_data, &_dataLen))
+    {
+        WARN("error waitResponse");
+        _data = WL_FAILURE;
+    }
+    SpiDrv::spiSlaveDeselect();
+    return _data;
 }
 
 int8_t WiFiDrv::disconnect()

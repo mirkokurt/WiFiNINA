@@ -102,6 +102,7 @@ public:
     static void MQTTmessageTopic(String& topic);
     static byte MQTTread();
     void MQTTpoll();
+    WiFiDrv::connectionCheck();
 
     /* Start Wifi connection with passphrase
      * the most secure supported mode will be automatically selected
