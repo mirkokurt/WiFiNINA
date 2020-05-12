@@ -96,8 +96,8 @@ public:
     static int8_t MQTTsubscribe(const char* topic, uint16_t topicLength , uint8_t qos, uint8_t qosLength);
     static void MQTTstop();
     static uint8_t MQTTconnected();
-    static int8_t MQTTbeginMessage(const char* topic, uint16_t topicLength(), unsigned long size, bool retain, uint8_t qos, bool dup);
-    static int MQTTwrite(const char* buf, int size);
+    static int8_t MQTTbeginMessage(const char* topic, uint16_t topicLength, unsigned long size, bool retain, uint8_t qos, bool dup);
+    static int MQTTwrite(const uint8_t* buf, int size);
     static int8_t MQTTendMessage();
     static void MQTTmessageTopic(String& topic);
     static byte MQTTread();

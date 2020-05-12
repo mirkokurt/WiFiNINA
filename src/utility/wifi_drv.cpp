@@ -513,7 +513,7 @@ void WiFiDrv::MQTTstop()
         _data = WL_FAILURE;
     }
     SpiDrv::spiSlaveDeselect();
-    return _data;
+    return;
 }
 
 uint8_t WiFiDrv::MQTTconnected()
@@ -540,7 +540,7 @@ uint8_t WiFiDrv::MQTTconnected()
     return _data;
 }
 
-int8_t WiFiDrv::MQTTbeginMessage(const char* topic, uint16_t topicLength(), unsigned long size, bool retain, uint8_t qos, bool dup)
+int8_t WiFiDrv::MQTTbeginMessage(const char* topic, uint16_t topicLength, unsigned long size, bool retain, uint8_t qos, bool dup)
 {
     WAIT_FOR_SLAVE_SELECT();
     // Send Command
@@ -575,7 +575,7 @@ int8_t WiFiDrv::MQTTbeginMessage(const char* topic, uint16_t topicLength(), unsi
     return _data;
 }
 
-int WiFiDrv::MQTTwrite(const char* buf, int size)
+int WiFiDrv::MQTTwrite(const uint8_t* buf, int size)
 {
     WAIT_FOR_SLAVE_SELECT();
     // Send Command

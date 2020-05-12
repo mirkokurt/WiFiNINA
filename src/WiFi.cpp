@@ -149,14 +149,14 @@ uint8_t WiFiClass::MQTTconnected()
 	return WiFiDrv::MQTTconnected();
 }
 
-int WiFiClass::MQTTbeginMessage(const String& topic, unsigned long size, bool retain = false, uint8_t qos = 0, bool dup = false)
+int WiFiClass::MQTTbeginMessage(const String& topic, unsigned long size, bool retain, uint8_t qos , bool dup)
 {
-	return WiFiDrv::MQTTbeginMessage(topic.c_str(), topic.length() +1, size, retain, qos, dup);
+	return WiFiDrv::MQTTbeginMessage(topic.c_str(), (uint16_t)(topic.length() +1), size, retain, qos, dup);
 }
 
 int WiFiClass::MQTTwrite(const uint8_t *buf, size_t size)
 {
-	return WiFiDrv::MQTTwrite(buf, size);
+	return WiFiDrv::MQTTwrite(buf, (int)size);
 }
 
 int WiFiClass::MQTTendMessage()
