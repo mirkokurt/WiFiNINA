@@ -98,7 +98,7 @@ public:
     int MQTTendMessage();
     String MQTTmessageTopic();
     byte MQTTread();
-    void MQTTpoll();
+    int MQTTpoll();
     uint8_t connectionCheck();
 
     /*Provisiong methods*/

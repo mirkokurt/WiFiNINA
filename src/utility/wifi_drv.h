@@ -101,7 +101,7 @@ public:
     static int8_t MQTTendMessage();
     static void MQTTmessageTopic(String& topic);
     static byte MQTTread();
-    static void MQTTpoll();
+    static int MQTTpoll();
     static uint8_t connectionCheck();
 
     static uint8_t iotCloudBeginCSR(int keySlot, bool newPrivateKey);

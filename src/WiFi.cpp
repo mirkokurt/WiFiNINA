@@ -177,7 +177,7 @@ byte WiFiClass::MQTTread()
 	return WiFiDrv::MQTTread();
 }
 
-void WiFiClass::MQTTpoll()
+int WiFiClass::MQTTpoll()
 {
 	return WiFiDrv::MQTTpoll();
 }

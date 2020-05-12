@@ -676,7 +676,7 @@ byte WiFiDrv::MQTTread()
     return _data;
 }
 
-void WiFiDrv::MQTTpoll()
+int WiFiDrv::MQTTpoll()
 {
     WAIT_FOR_SLAVE_SELECT();
 
@@ -689,16 +689,17 @@ void WiFiDrv::MQTTpoll()
     SpiDrv::spiSlaveSelect();
 
     // Wait for reply
-    uint8_t _data;
+    int _data;
+    uint8_t _dataraw[sizeof(_data)];
     uint8_t _dataLen = 0;
-    if (!SpiDrv::waitResponseCmd(IOT_MQTT_POLL, PARAM_NUMS_1, &_data, &_dataLen))
+    if (!SpiDrv::waitResponseCmd(IOT_MQTT_POLL, PARAM_NUMS_1, _dataraw, &_dataLen))
     {
         WARN("error waitResponse");
         _data = WL_FAILURE;
     }
     SpiDrv::spiSlaveDeselect();
-
-    return;
+    memcpy(&_data, _dataraw, sizeof(_data));
+    return _data;
 }
 
 uint8_t WiFiDrv::connectionCheck()
