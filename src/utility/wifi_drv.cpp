@@ -619,7 +619,7 @@ uint8_t WiFiDrv::iotCloudBeginStorage(int compressedCertSlot, int serialNumberAn
     return _data;
 }
 
-uint8_t WiFiDrv::iotCloudEndStorage(byte signature[], byte authorityKeyIdentifier[], byte serialNumber[], int dates[])
+uint8_t WiFiDrv::iotCloudEndStorage(byte signature[], byte authorityKeyIdentifier[], byte serialNumber[], uint8_t dates[])
 {
     WAIT_FOR_SLAVE_SELECT();
     // Send Command

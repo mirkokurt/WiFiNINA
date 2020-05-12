@@ -62,7 +62,7 @@ public:
     int iotBeginCSR(int keySlot, bool newPrivateKey);
     String iotEndCSR(String subjectCommonName);
     int iotBeginStorage(int compressedCertSlot, int serialNumberAndAuthorityKeyIdentifierSlot);
-    int iotEndStorage(byte signature[], byte authorityKeyIdentifier[], byte serialNumber[], int dates[]);
+    int iotEndStorage(byte signature[], byte authorityKeyIdentifier[], byte serialNumber[], uint8_t dates[]);
     int iotBeginReconstruction(int keySlot, int compressedCertSlot, int serialNumberAndAuthorityKeyIdentifierSlot);
     int iotEndReconstruction(String countryName, String organizationName, String organizationalUnitName, String commonName);
     int iotGetCert(byte * cert);

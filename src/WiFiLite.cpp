@@ -207,7 +207,7 @@ int WiFiLiteClass::iotBeginStorage(int compressedCertSlot, int serialNumberAndAu
 	return 1;
 }
 
-int WiFiLiteClass::iotEndStorage(byte signature[], byte authorityKeyIdentifier[], byte serialNumber[], int dates[]){
+int WiFiLiteClass::iotEndStorage(byte signature[], byte authorityKeyIdentifier[], byte serialNumber[], uint8_t dates[]){
 	if (WiFiDrv::iotCloudEndStorage(signature, authorityKeyIdentifier, serialNumber, dates)== WL_FAILURE)
 	{
 		return - 1;
